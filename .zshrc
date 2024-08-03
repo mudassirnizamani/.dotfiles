@@ -46,7 +46,7 @@ ENABLE_CORRECTION="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 
-plugins=(git zsh-autosuggestions)
+plugins=(git zsh-autosuggestions dotenv)
 
 source $ZSH/oh-my-zsh.sh
 
