@@ -7,7 +7,7 @@ set_laptop_primary() {
 }
 
 set_external_moniter_primary() {
-    xrandr --output eDP-1 --off --output HDMI-1 --primary --auto --scale 1.2x1.2
+    xrandr --output eDP-1 --off --output HDMI-1 --primary --auto --scale 1.0x1.0
 }
 
 # Monitor the display state

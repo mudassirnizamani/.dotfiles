@@ -18,8 +18,16 @@ setopt hist_ignore_dups
 setopt hist_verify
 
 export PATH=$PATH:$HOME/binaries/go/bin
+export PATH=$PATH:/$HOME/binaries/flutter/bin
+
+export ANDROID_HOME=$PATH:/home/mujheri/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:/home/mujheri/go/bin
 
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+

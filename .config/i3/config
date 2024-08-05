@@ -15,20 +15,26 @@ set $mod Mod4
 # is used in the bar {} block below.
 font pango:monospace 14
 
-exec --no-startup-id picom
+exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
 exec --no-startup-id feh --bg-scale ~/backgrounds/nice-blue-background.png
 exec --no-startup-id xrdb -merge ~/.Xresources
 exec_always --no-startup-id setxkbmap -option ctrl:nocaps
-exec_always xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
-exec_always xinput --set-prop "SynPS/2 Synaptics TouchPad" "Device Accel Constant Deceleration" 1.9
+exec always nitrogen --restore
 
-
-exec --no-startup-id ~/.config/i3/dual_moniter_setup.sh
+# exec --no-startup-id ~/.config/i3/dual_moniter_setup.sh
+exec --no-startup-id ~/.config/i3/touchpad.sh
 
 # kill any hanging polybar processes
 # exec_always killall polybar
 # exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
 #
+
+#Hide window title bar
+default_border pixel 1
+default_floating_border pixel 1
+for_window [class="^.*"] border pixel 1
+default_border pixel 0
+for_window [class="^.*"] border pixel 0
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -69,10 +75,8 @@ bindsym $mod+Return exec kitty
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start rofi (a program launcher)
-# bindsym $mod+d exec --no-startup-id rofi -show drun
-bindsym $mod+space exec --no-startup-id rofi -show combi
-bindsym $mod+Tab exec --no-startup-id rofi -show window
+# start ulaunher (a program launcher)
+bindsym $mod+space exec --no-startup-id ulauncher
 
 #Brightness lavels change
 bindsym XF86MonBrightnessDown exec brightnessctl s 5%-
@@ -178,8 +182,8 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-
+# bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+#
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -212,3 +216,21 @@ bindsym $mod+r mode "resize"
 bar {
         status_command i3status
 }
+
+
+# Suspend
+bindsym $mod+Shift+period exec systemctl suspend
+
+
+# Create Log out, Reboot, Poweroff bindings
+mode "Exit (L)ogout, (R)eboot, (P)oweroff" {
+        bindsym $mod+r exec systemctl reboot
+        bindsym $mod+l exit
+        bindsym $mod+p exec systemctl poweroff
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+Shift+e mode "Exit (L)ogout, (R)eboot, (P)oweroff"
