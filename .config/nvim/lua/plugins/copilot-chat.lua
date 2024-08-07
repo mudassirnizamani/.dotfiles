@@ -13,10 +13,31 @@ function M.pick(kind)
   end
 end
 
+local function get_git_diff(staged)
+  local cmd = staged and "git diff --staged" or "git diff"
+  local handle = io.popen(cmd)
+  if not handle then
+    return ""
+  end
+
+  local result = handle:read("*a")
+  handle:close()
+  return result
+end
+
+
 return {
+  -- Uncomment this if you want to use 'Copilot setup' command to setup copilot.
+  -- {
+  --   "https://github.com/github/copilot.vim"
+  -- },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "canary",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" },  -- for curl, log wrapper
+    },
     cmd = "CopilotChat",
     opts = function()
       local user = vim.env.USER or "User"
@@ -37,8 +58,8 @@ return {
       }
     end,
     keys = {
-      { "<c-s>",     "<CR>", ft = "copilot-chat", desc = "Submit Prompt", remap = true },
-      { "<leader>a", "",     desc = "+ai",        mode = { "n", "v" } },
+      { "<leader>as", "<CR>", ft = "copilot-chat", desc = "Submit Prompt", remap = true },
+      { "<leader>a",  "",     desc = "+ai",        mode = { "n", "v" } },
       {
         "<leader>aa",
         function()
@@ -66,6 +87,18 @@ return {
         desc = "Quick Chat (CopilotChat)",
         mode = { "n", "v" },
       },
+      {
+        "<leader>ac",
+        function()
+          local diff = get_git_diff(true)
+          if diff ~= "" then
+            vim.fn.setreg('""', diff)
+            vim.cmd("CopilotChat Write commit message for the changes with commitizen convention.")
+          end
+        end,
+        desc = "Genrate commit for all changes",
+        mode = { "n", "v" },
+      },
       -- Show help actions with telescope
       { "<leader>ad", M.pick("help"),   desc = "Diagnostic Help (CopilotChat)", mode = { "n", "v" } },
       -- Show prompts actions with telescope
@@ -87,7 +120,7 @@ return {
     end,
   },
 
-  -- Edgy integration
+
   {
     "folke/edgy.nvim",
     optional = true,
