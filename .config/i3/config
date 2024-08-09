@@ -21,8 +21,8 @@ exec --no-startup-id xrdb -merge ~/.Xresources
 exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 exec always nitrogen --restore
 
-# exec --no-startup-id ~/.config/i3/dual_moniter_setup.sh
-exec --no-startup-id ~/.config/i3/touchpad.sh
+exec_always --no-startup-id ~/.config/i3/dual_moniter_setup.sh
+exec_always --no-startup-id ~/.config/i3/touchpad.sh
 
 # kill any hanging polybar processes
 # exec_always killall polybar
@@ -70,7 +70,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec alacritty -e tmux
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -234,3 +234,4 @@ mode "Exit (L)ogout, (R)eboot, (P)oweroff" {
 }
 
 bindsym $mod+Shift+e mode "Exit (L)ogout, (R)eboot, (P)oweroff"
+
