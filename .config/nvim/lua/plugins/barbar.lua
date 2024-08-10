@@ -48,7 +48,7 @@ return {
 			icons = {
 				button = "",
 				buffer_index = true,
-				filetype = { enabled = true },
+				filetype = { enabled = false },
 				visible = { modified = { buffer_number = false } },
 				gitsigns = {
 					added = { enabled = true, icon = "+" },

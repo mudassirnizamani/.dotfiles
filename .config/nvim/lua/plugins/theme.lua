@@ -11,10 +11,36 @@ return {
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'moonfly'
+      -- vim.cmd.colorscheme 'moonfly'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
   },
+  {
+    "0xstepit/flow.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+    config = function()
+      require("flow").setup {
+        transparent = false,      -- Set transparent background.
+        fluo_color = "pink",      --  Fluo color: pink, yellow, orange, or green.
+        mode = "normal",          -- Intensity of the palette: normal, bright, desaturate, or dark. Notice that dark is ugly!
+        aggressive_spell = false, -- Display colors for spell check.
+      }
+
+      vim.cmd "colorscheme flow"
+    end,
+  },
+  {
+    "tiagovla/tokyodark.nvim",
+    opts = {
+      -- custom options here
+    },
+    config = function(_, opts)
+      require("tokyodark").setup(opts) -- calling setup is optional
+      -- vim.cmd [[colorscheme tokyodark]]
+    end,
+  }
 }

@@ -42,20 +42,20 @@ return {
 							action = [[lua require('telescope.builtin').find_files()]],
 							key = "f",
 						},
-						{
-							icon = " ",
-							desc = "Config",
-							group = "Number",
-							action =
-							[[lua require('fzf-lua').files({ cwd = '~/.config/nvim' })]],
-							key = "c",
-						},
+						-- {
+						-- 	icon = " ",
+						-- 	desc = "Config",
+						-- 	group = "Number",
+						-- 	action =
+						-- 	[[lua require('fzf-lua').files({ cwd = '~/.config/nvim' })]],
+						-- 	key = "c",
+						-- },
 						{
 							icon = " ",
 							desc = " Restore Session",
 							group = "Number",
 							action = [[lua require('persistence').load()]],
-							key = "s",
+							key = "w",
 						},
 						{ icon = "󰒲 ", desc = " Lazy", group = "Number", action = "Lazy", key = "l" },
 						{ icon = " ", desc = " Quit", group = "Number", action = "qa", key = "q" },
