@@ -30,7 +30,7 @@ return {
         aggressive_spell = false, -- Display colors for spell check.
       }
 
-      vim.cmd "colorscheme flow"
+      -- vim.cmd "colorscheme flow"
     end,
   },
   {
@@ -42,5 +42,31 @@ return {
       require("tokyodark").setup(opts) -- calling setup is optional
       -- vim.cmd [[colorscheme tokyodark]]
     end,
+  },
+  {
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- vim.cmd("colorscheme cyberdream")
+    end
+  },
+  {
+    "rebelot/kanagawa.nvim",
+    lazy = false,
+    config = function()
+      vim.cmd("colorscheme kanagawa-wave")
+    end
+  },
+  {
+    "navarasu/onedark.nvim",
+    lazy = false,
+    config = function()
+      require('onedark').setup {
+        style = 'warmer'
+      }
+
+      -- vim.cmd("colorscheme onedark")
+    end
   }
 }

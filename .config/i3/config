@@ -24,6 +24,9 @@ exec always nitrogen --restore
 exec_always --no-startup-id ~/.config/i3/dual_moniter_setup.sh
 exec_always --no-startup-id ~/.config/i3/touchpad.sh
 
+#open some applications
+bindsym $mod+g exec DLI_PRIME=1 google-chrome
+
 # kill any hanging polybar processes
 # exec_always killall polybar
 # exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
@@ -57,8 +60,8 @@ exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
@@ -79,10 +82,14 @@ bindsym $mod+Shift+q kill
 # start ulaunher (a program launcher)
 bindsym $mod+space exec --no-startup-id ulauncher
 
-#Brightness lavels change
+#Brightness levels change
 bindsym XF86MonBrightnessDown exec brightnessctl s 5%-
 bindsym XF86MonBrightnessUp exec brightnessctl s +5%
 
+#Change Volume levels - it was already added
+# bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+# bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+#
 # start dmenu (a program launcher)
 bindsym $mod+d exec --no-startup-id dmenu_run
 # A more modern dmenu replacement is rofi:
@@ -216,6 +223,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         # status_command SCRIPT_DIR=~/.config/i3blocks/scripts i3blocks
+        # status_command i3status | bash /home/mujheri/.dotfiles/.config/i3status/battery_reload.sh
         status_command i3status
         separator_symbol " | "
 }

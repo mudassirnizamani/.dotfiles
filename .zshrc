@@ -19,6 +19,7 @@ setopt hist_verify
 
 export PATH=$PATH:$HOME/binaries/go/bin
 export PATH=$PATH:/$HOME/binaries/flutter/bin
+export PATH=$PATH:/$HOME/binaries/go-migrate
 
 export ANDROID_HOME=$PATH:/home/mujheri/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/tools
@@ -33,7 +34,7 @@ export NVM_DIR="$HOME/.nvm"
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/mujheri/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/home/mujheri/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '/home/mujheri/binaries/google-cloud-sdk/path.zsh.inc' ]; then . '/home/mujheri/binaries/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/mujheri/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/mujheri/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '/home/mujheri/binaries/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/mujheri/binaries/google-cloud-sdk/completion.zsh.inc'; fi
