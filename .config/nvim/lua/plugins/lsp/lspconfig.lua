@@ -199,5 +199,8 @@ return { -- LSP Configuration & Plugins
 		})
 
 		require("flutter-tools").setup {} -- use defaults
+
+		-- Turn on lsp status information
+		require('fidget').setup()
 	end,
 }
