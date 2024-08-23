@@ -3,11 +3,11 @@
 
 # Function to set the laptop screen as primary
 set_laptop_primary() {
-    xrandr --output eDP-1 --primary --auto --output HDMI-1 --off
+    xrandr --output eDP --primary --auto --output HDMI-A-0 --off
 }
 
 set_external_moniter_primary() {
-    xrandr --output eDP-1 --off --output HDMI-1 --primary --auto --scale 1.0x1.0
+    xrandr --output eDP --off --output HDMI-A-0 --primary --auto --scale 1.0x1.0
 }
 
 # Monitor the display state

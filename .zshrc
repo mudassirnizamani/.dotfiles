@@ -1,6 +1,17 @@
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
 
+HAS_WIDECHARS="false"
+# Source manjaro-zsh-configuration
+# if [[ -e /usr/share/zsh/manjaro-zsh-config ]]; then
+#   source /usr/share/zsh/manjaro-zsh-config
+# fi
+#
+# Use manjaro zsh prompt
+# if [[ -e /usr/share/zsh/manjaro-zsh-prompt ]]; then
+#   source /usr/share/zsh/manjaro-zsh-prompt
+# fi
+#
 
 source $ZSH/oh-my-zsh.sh
 source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -19,7 +30,9 @@ setopt hist_verify
 
 export PATH=$PATH:$HOME/binaries/go/bin
 export PATH=$PATH:/$HOME/binaries/flutter/bin
+export PATH="$PATH:/opt/nvim-linux64/bin"
 export PATH=$PATH:/$HOME/binaries/go-migrate
+export PATH="$PATH:/$HOME/.local/kitty.app/bin"
 
 export ANDROID_HOME=$PATH:/home/mujheri/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/tools
