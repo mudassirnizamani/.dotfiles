@@ -16,7 +16,7 @@ set $mod Mod4
 font pango:JetBrainsMono Nerd Font 14
 
 exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
-exec_always --no-startup-id feh --bg-center ~/wallpapers/superman.jpg
+exec_always --no-startup-id feh --bg-scale ~/wallpapers/tony-stark.png
 exec --no-startup-id xrdb -merge ~/.Xresources
 exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 
@@ -24,7 +24,7 @@ exec_always --no-startup-id ~/.config/i3/dual_moniter_setup.sh
 exec_always --no-startup-id ~/.config/i3/touchpad.sh
 
 #open some applications
-bindsym $mod+g exec DLI_PRIME=1 google-chrome
+bindsym $mod+u exec gmtool admin start "Google Pixel 5"
 
 # kill any hanging polybar processes
 # exec_always killall polybar

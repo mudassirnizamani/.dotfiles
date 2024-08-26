@@ -16,7 +16,7 @@ HAS_WIDECHARS="false"
 source $ZSH/oh-my-zsh.sh
 source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-plugins=(git zsh-autosuggestions dotenv)
+plugins=(git zsh-autosuggestions dotenv direnv)
 prompt_context() {} 
 
 # history setup
@@ -33,6 +33,11 @@ export PATH=$PATH:/$HOME/binaries/flutter/bin
 export PATH="$PATH:/opt/nvim-linux64/bin"
 export PATH=$PATH:/$HOME/binaries/go-migrate
 export PATH="$PATH:/$HOME/.local/kitty.app/bin"
+
+export GOPATH=$HOME/go
+# export GOROOT=$PATH:$HOME/binaries/go
+
+# export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 export ANDROID_HOME=$PATH:/home/mujheri/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/tools
@@ -51,3 +56,5 @@ if [ -f '/home/mujheri/binaries/google-cloud-sdk/path.zsh.inc' ]; then . '/home/
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/mujheri/binaries/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/mujheri/binaries/google-cloud-sdk/completion.zsh.inc'; fi
+
+eval "$(direnv hook zsh)"
