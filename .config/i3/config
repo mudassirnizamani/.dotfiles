@@ -16,7 +16,7 @@ set $mod Mod4
 font pango:JetBrainsMono Nerd Font 14
 
 exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
-exec_always --no-startup-id feh --bg-scale ~/wallpapers/tony-stark.png
+exec_always --no-startup-id feh --bg-fill ~/wallpapers/tony-stark.png
 exec --no-startup-id xrdb -merge ~/.Xresources
 exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 
@@ -72,8 +72,8 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-# bindsym $mod+Return exec alacritty -e tmux
-bindsym $mod+Return exec ./kitty
+bindsym $mod+Return exec tmux
+# bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill

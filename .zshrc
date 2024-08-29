@@ -1,6 +1,11 @@
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
 
+alias ls="eza --icons=always"
+eval "$(zoxide init zsh)"
+
+alias cd="z"
+
 HAS_WIDECHARS="false"
 # Source manjaro-zsh-configuration
 # if [[ -e /usr/share/zsh/manjaro-zsh-config ]]; then
@@ -58,3 +63,4 @@ if [ -f '/home/mujheri/binaries/google-cloud-sdk/path.zsh.inc' ]; then . '/home/
 if [ -f '/home/mujheri/binaries/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/mujheri/binaries/google-cloud-sdk/completion.zsh.inc'; fi
 
 eval "$(direnv hook zsh)"
+

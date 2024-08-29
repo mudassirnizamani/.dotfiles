@@ -31,10 +31,12 @@
 # Function to set the laptop screen as primary
 set_laptop_primary() {
     xrandr --output eDP --primary --auto --output HDMI-A-0 --off
+    feh --bg-fill ~/wallpapers/tony-stark.png
 }
 
 set_external_monitor_primary() {
     xrandr --output eDP --off --output HDMI-A-0 --primary --auto --scale 1.0x1.0
+    feh --bg-fill ~/wallpapers/tony-stark.png
 }
 
 # Function to check the HDMI connection status
