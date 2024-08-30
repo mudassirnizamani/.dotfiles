@@ -23,8 +23,11 @@ exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 exec_always --no-startup-id ~/.config/i3/dual_moniter_setup.sh
 exec_always --no-startup-id ~/.config/i3/touchpad.sh
 
-#open some applications
+#start some applications
 bindsym $mod+u exec gmtool admin start "Google Pixel 5"
+bindsym $mod+Return exec alacritty -e tmux
+bindsym $mod+z exec zen-browser
+
 
 # kill any hanging polybar processes
 # exec_always killall polybar
@@ -70,10 +73,6 @@ floating_modifier $mod
 # move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
 tiling_drag modifier titlebar
-
-# start a terminal
-bindsym $mod+Return exec tmux
-# bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+Shift+q kill
