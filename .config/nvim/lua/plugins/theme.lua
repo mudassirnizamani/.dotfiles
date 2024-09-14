@@ -1,20 +1,9 @@
 return {
-  -- themes
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  {
     'bluz71/vim-moonfly-colors',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+    priority = 1000,
     init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'moonfly'
-
-      -- You can configure highlights by doing something like:
-      -- vim.cmd.hi 'Comment gui=none'
+      -- vim.cmd.colorscheme 'moonfly'
     end,
   },
   {
@@ -24,19 +13,17 @@ return {
     opts = {},
     config = function()
       require("flow").setup {
-        transparent = false,      -- Set transparent background.
-        fluo_color = "pink",      --  Fluo color: pink, yellow, orange, or green.
+        transparent = true,       -- Set transparent background.
+        fluo_color = "orange",    --  Fluo color: pink, yellow, orange, or green.
         mode = "normal",          -- Intensity of the palette: normal, bright, desaturate, or dark. Notice that dark is ugly!
         aggressive_spell = false, -- Display colors for spell check.
       }
-
-      -- vim.cmd "colorscheme flow"
+      vim.cmd "colorscheme flow"
     end,
   },
   {
     "tiagovla/tokyodark.nvim",
     opts = {
-      -- custom options here
     },
     config = function(_, opts)
       require("tokyodark").setup(opts) -- calling setup is optional
@@ -68,5 +55,14 @@ return {
 
       -- vim.cmd("colorscheme onedark")
     end
-  }
+  },
+  {
+    "nyoom-engineering/oxocarbon.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      -- vim.opt.background = "dark" -- set this to dark or light
+      -- vim.cmd.colorscheme "oxocarbon"
+    end
+  },
 }

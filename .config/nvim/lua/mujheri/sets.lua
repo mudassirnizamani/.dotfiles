@@ -3,6 +3,7 @@
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
+vim.g.material_style = "deep ocean"
 local opt = vim.opt
 
 -- change the file explorer style

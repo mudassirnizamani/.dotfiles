@@ -8,7 +8,7 @@ return {
 		ft = { "go", "gomod" },
 		build = ':lua require("go.install").update_all_sync()'
 	}, {
-		"ray-x/lsp_signature.nvim",         -- Show function signature when you type
+		"ray-x/lsp_signature.nvim", -- Show function signature when you type
 		event = "VeryLazy",
 		config = function() require("lsp_signature").setup() end
 	}
@@ -16,7 +16,7 @@ return {
 	config = function()
 		require("go").setup()
 		require("navigator").setup({
-			lsp_signature_help = true,       -- enable ray-x/lsp_signature
+			lsp_signature_help = true, -- enable ray-x/lsp_signature
 			lsp = { format_on_save = true }
 		})
 
@@ -34,15 +34,17 @@ return {
 					":GoCoverage -p<CR>", {})
 
 				-- Opens test files
-				vim.api.nvim_buf_set_keymap(0, "n", "A",
-					":lua require('go.alternate').switch(true, '')<CR>",
-					{})                                   -- Test
-				vim.api.nvim_buf_set_keymap(0, "n", "V",
-					":lua require('go.alternate').switch(true, 'vsplit')<CR>",
-					{})                                   -- Test Vertical
-				vim.api.nvim_buf_set_keymap(0, "n", "S",
-					":lua require('go.alternate').switch(true, 'split')<CR>",
-					{})                                   -- Test Split
+				-- vim.api.nvim_buf_set_keymap(0, "n", "A",
+				-- 	":lua require('go.alternate').switch(true, '')<CR>",
+				-- 	{}) -- Test
+				--
+				-- vim.api.nvim_buf_set_keymap(0, "n", "V",
+				-- 	":lua require('go.alternate').switch(true, 'vsplit')<CR>",
+				-- 	{}) -- Test Vertical
+				--
+				-- vim.api.nvim_buf_set_keymap(0, "n", "S",
+				-- 	":lua require('go.alternate').switch(true, 'split')<CR>",
+				-- 	{}) -- Test Split
 			end,
 			group = vim.api.nvim_create_augroup("go_autocommands",
 				{ clear = true })

@@ -1,7 +1,7 @@
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
 
-alias ls="eza --icons=always"
+
 eval "$(zoxide init zsh)"
 
 alias cd="z"
@@ -64,3 +64,4 @@ if [ -f '/home/mujheri/binaries/google-cloud-sdk/completion.zsh.inc' ]; then . '
 
 eval "$(direnv hook zsh)"
 
+alias ls="exa --color always --header --icons"
