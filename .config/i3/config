@@ -22,11 +22,15 @@ exec_always --no-startup-id setxkbmap -option ctrl:nocaps
 
 exec_always --no-startup-id ~/.config/i3/dual_moniter_setup.sh
 exec_always --no-startup-id ~/.config/i3/touchpad.sh
+exec_always --no-startup-id xss-lock -- i3lock-fancy
+# exec_always --no-startup-id xss-lock -- ~/.config/i3/lock.sh
 
 #start some applications
 bindsym $mod+u exec gmtool admin start "Google Pixel 5"
 bindsym $mod+Return exec alacritty -e tmux
 bindsym $mod+z exec zen-browser
+bindsym $mod+o exec obsidian
+
 
 
 # kill any hanging polybar processes
@@ -54,7 +58,7 @@ exec --no-startup-id dex-autostart --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -223,6 +227,7 @@ bar {
         # status_command SCRIPT_DIR=~/.config/i3blocks/scripts i3blocks
         # status_command i3status | bash /home/mujheri/.dotfiles/.config/i3status/battery_reload.sh
         status_command i3status
+    position top
         separator_symbol " | "
 }
 
