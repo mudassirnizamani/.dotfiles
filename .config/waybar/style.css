@@ -8,7 +8,8 @@
 }
 
 window#waybar {
-    background: rgba(21, 18, 27, 0);
+    /* background: rgba(21, 18, 27, 0); */
+    background: rgba(21, 18, 27, 0.8); /* Dark background with 80% opacity */
     color: #f6f7fc;
 }
 
@@ -69,10 +70,25 @@ tooltip label{
 #idle_inhibitor,
 #backlight {
     background: rgba(21, 18, 27, 0);
-    opacity: 1;
+    opacity: 5;
     padding: 0px 8px;
     margin: 0px 3px;
     border: 0px;
+}
+
+#cpu,
+#pulseaudio,
+#pulseaudio\#microphone,
+#backlight,
+#tray,
+#temperature,
+#battery,
+#hyprland
+#language,
+#custom-power_profile,
+#custom-myhyprv,
+#custom-light_dark {
+    font-size: 20px; /* Adjust this value as needed */
 }
 
 #temperature.critical {

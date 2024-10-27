@@ -5,7 +5,7 @@
     "exclusive": true,
     "passthrough": false,
     "gtk-layer-shell": true,
-    "height": 20,
+    "height": 26,
     "modules-left": [
         "custom/power_btn",
         "custom/lock_screen",
