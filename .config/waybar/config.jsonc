@@ -7,8 +7,6 @@
     "gtk-layer-shell": true,
     "height": 26,
     "modules-left": [
-        "custom/power_btn",
-        "custom/lock_screen",
         "wlr/workspaces"
     ],
     "modules-center": [
@@ -26,8 +24,8 @@
         "custom/power_profile",
         "battery",
         "hyprland/language",
-        "custom/myhyprv",
-        "custom/light_dark"
+        "custom/myhyprv"
+        // "custom/light_dark"
     ],
     
     "include": [
@@ -68,6 +66,7 @@
     "wlr/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
+        "format": "{name}",
         "on-click": "activate",
         "persistent_workspaces": {
             "1": [],
@@ -105,6 +104,26 @@
         "format-alt": "{icon} {capacity}%",
         "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
     },
+
+
+
+//     "temperature": {
+//     "format": "{icon} {temperature}°C",  // Display the icon and temperature value
+//     "interval": 10,  // Refresh interval in seconds
+//     "format-icons": ["󰔄", "󰔅", "󰔆"],  // Icons for low, medium, and high temperatures
+//     "tooltip": true,
+//     "warning": 70,  // Warning level in °C
+//     "critical": 85,  // Critical level in °C
+//     "on-click": "kitty --title temp_monitor --hold watch sensors"  // Opens a detailed monitor on click
+// },
+
+    "temperature": {
+	// "thermal-zone": 2,
+	// "hwmon-path": ["/sys/class/hwmon/hwmon2/temp1_input", "/sys/class/thermal/thermal_zone0/temp"],
+	// "critical-threshold": 80,
+	// "format-critical": "{temperatureC}°C ",
+	"format": "{temperatureC}°C "
+},
 
     "pulseaudio": {
         "format": "{icon}",
