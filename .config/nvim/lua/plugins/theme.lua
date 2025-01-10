@@ -3,7 +3,7 @@ return {
     'bluz71/vim-moonfly-colors',
     priority = 1000,
     init = function()
-      -- vim.cmd.colorscheme 'moonfly'
+      vim.cmd.colorscheme 'moonfly'
     end,
   },
   {
@@ -18,7 +18,7 @@ return {
         mode = "normal",          -- Intensity of the palette: normal, bright, desaturate, or dark. Notice that dark is ugly!
         aggressive_spell = false, -- Display colors for spell check.
       }
-      vim.cmd "colorscheme flow"
+      -- vim.cmd "colorscheme flow"
     end,
   },
   {

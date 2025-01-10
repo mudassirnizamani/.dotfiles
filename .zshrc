@@ -34,7 +34,7 @@ setopt hist_ignore_dups
 setopt hist_verify
 
 export PATH=$PATH:$HOME/binaries/go/bin
-export PATH=$PATH:/$HOME/binaries/flutter/bin
+export PATH=$PATH:$HOME/binaries/flutter/bin
 export PATH="$PATH:/opt/nvim-linux64/bin"
 export PATH=$PATH:/$HOME/binaries/go-migrate
 export PATH="$PATH:/$HOME/.local/kitty.app/bin"
