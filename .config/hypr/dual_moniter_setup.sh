@@ -1,61 +1,38 @@
-
 #!/bin/bash
 
-# # Function to set the laptop screen as primary
-# set_laptop_primary() {
-#     xrandr --output eDP --primary --auto --output HDMI-A-0 --off
-# }
-#
-# set_external_moniter_primary() {
-#     xrandr --output eDP --off --output HDMI-A-0 --primary --auto --scale 1.0x1.0
-# }
-#
-# # Monitor the display state
-# while true; do
-#     # Check if the external monitor is connected
-#     if ! xrandr | grep -q "HDMI-A-0 disconnected"; then
-#         # External monitor is disconnected, set the laptop screen as primary
-#         set_laptop_primary
-#     fi
-#
-#     if  xrandr | grep -q "HDMI-A-0 connected"; then
-#         # External monitor is disconnected, set the laptop screen as primary
-#         set_external_moniter_primary
-#     fi
-#
-#
-#     # Sleep for 2 seconds before checking again
-#     sleep 2
-# done
+restart_waybar() {
+    pkill waybar
+    waybar --config ~/.config/waybar/config.jsonc
+}
 
 # Function to set the laptop screen as primary
 set_laptop_primary() {
-    xrandr --output eDP --primary --auto --output HDMI-A-0 --off
-    feh --bg-fill ~/wallpapers/tony-stark.png
+  hyprctl keyword monitor eDP-1,preferred,auto,1 
+  restart_waybar
 }
 
 set_external_monitor_primary() {
-    xrandr --output eDP --off --output HDMI-A-0 --primary --auto --scale 1.0x1.0
-    feh --bg-fill ~/wallpapers/tony-stark.png
+  hyprctl keyword monitor eDP-1, disable
+  restart_waybar
 }
 
 # Function to check the HDMI connection status
 is_hdmi_connected() {
-    xrandr | grep -q "HDMI-A-0 connected"
+    hyprctl monitors | grep -q "HDMI-A-1"
 }
 
 # Function to monitor the display state
 monitor_display_state() {
     # Variable to keep track of the current primary display
-    local current_primary="eDP"
+    local current_primary="eDP-1"
 
     while true; do
-        if is_hdmi_connected && [ "$current_primary" = "eDP" ]; then
+        if is_hdmi_connected && [ "$current_primary" = "eDP-1" ]; then
             set_external_monitor_primary
-            current_primary="HDMI-A-0"
-        elif ! is_hdmi_connected && [ "$current_primary" = "HDMI-A-0" ]; then
+            current_primary="HDMI-A-1"
+        elif ! is_hdmi_connected && [ "$current_primary" = "HDMI-A-1" ]; then
             set_laptop_primary
-            current_primary="eDP"
+            current_primary="eDP-1"
         fi
 
         # Sleep for 2 seconds before checking again
@@ -63,5 +40,5 @@ monitor_display_state() {
     done
 }
 
-# Start monitoring the display state
+trap "echo 'Exiting...'; exit" SIGINT SIGTERM
 monitor_display_state
