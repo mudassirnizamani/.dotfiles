@@ -74,6 +74,7 @@ keybind = alt+physical:seven=unbind
 keybind = alt+physical:two=unbind
 keybind = alt+physical:six=unbind
 keybind = alt+physical:eight=unbind
+keybind = ctrl+physical:six=unbind
 
 keybind = ctrl+page_up=scroll_page_up
 keybind = ctrl+physical:four=goto_tab:4
@@ -92,4 +93,3 @@ keybind = ctrl+physical:nine=goto_tab:9
 keybind = ctrl+physical:five=goto_tab:5
 keybind = ctrl+physical:seven=goto_tab:7
 keybind = ctrl+physical:two=goto_tab:2
-keybind = ctrl+physical:six=goto_tab:6
