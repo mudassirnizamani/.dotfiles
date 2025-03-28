@@ -12,6 +12,7 @@ set_laptop_primary() {
 }
 
 set_external_monitor_primary() {
+  swww img ~/wallpapers/creation.jpg --transition-fps 60 --transition-type wipe --transition-duration 1.2
   hyprctl keyword monitor eDP-1, disable
   restart_waybar
 }
