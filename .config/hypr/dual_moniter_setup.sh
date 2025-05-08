@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-WALLPAPER_PATH="${WALLPAPER_PATH:-$HOME/wallpapers/creation.jpg}"
+WALLPAPER_PATH="${WALLPAPER_PATH:-$HOME/wallpapers/tony-stark.png}"
 LOG_FILE="${LOG_FILE:-$HOME/.local/share/hypr/monitor.log}"
 CHECK_INTERVAL="${CHECK_INTERVAL:-2}"
 
