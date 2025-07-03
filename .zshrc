@@ -65,3 +65,4 @@ if [ -f '/home/mujheri/binaries/google-cloud-sdk/completion.zsh.inc' ]; then . '
 eval "$(direnv hook zsh)"
 
 alias ls="exa --color always --header --icons"
+export CHROME_EXECUTABLE=/usr/bin/google-chrome-stable
