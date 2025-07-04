@@ -73,44 +73,94 @@ setup_pulseaudio_noise_reduction() {
 setup_rnnoise() {
     echo -e "${BLUE}Setting up RNNoise (AI-based noise reduction)...${NC}"
     
-    # Install RNNoise if not present
-    if ! command_exists "rnnoise"; then
-        echo -e "${YELLOW}Installing RNNoise...${NC}"
+    # Check if RNNoise LADSPA plugin is available
+    if ! ls /usr/lib/ladspa/librnnoise_ladspa.so >/dev/null 2>&1; then
+        echo -e "${YELLOW}RNNoise LADSPA plugin not found${NC}"
+        echo -e "${CYAN}Installing required packages...${NC}"
         
-        # Check if available in repos
-        if pacman -Ss rnnoise >/dev/null 2>&1; then
-            sudo pacman -S rnnoise --noconfirm
-        else
-            echo -e "${YELLOW}RNNoise not in repos, installing from AUR...${NC}"
-            if command_exists "yay"; then
-                yay -S rnnoise --noconfirm
-            elif command_exists "paru"; then
-                paru -S rnnoise --noconfirm
-            else
-                echo -e "${RED}❌ AUR helper not found. Please install yay or paru first${NC}"
-                return 1
-            fi
+        # Install RNNoise and noise-suppression-for-voice
+        install_packages "rnnoise" "noise-suppression-for-voice" "ladspa"
+        
+        if ! ls /usr/lib/ladspa/librnnoise_ladspa.so >/dev/null 2>&1; then
+            echo -e "${RED}❌ Failed to install RNNoise LADSPA plugin${NC}"
+            echo -e "${CYAN}Using basic noise reduction instead...${NC}"
+            setup_pulseaudio_noise_reduction
+            return $?
         fi
     fi
     
-    # Load PulseAudio module with RNNoise
+    # Remove existing noise reduction modules first
+    remove_noise_reduction_quiet
+    
+    # Create null sink for RNNoise processing
+    pactl load-module module-null-sink \
+        sink_name=mic_denoised_out \
+        sink_properties=device.description='"Microphone Denoised Output"' \
+        rate=48000
+    
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}❌ Failed to create null sink${NC}"
+        setup_pulseaudio_noise_reduction
+        return $?
+    fi
+    
+    # Load LADSPA sink with RNNoise
     pactl load-module module-ladspa-sink \
-        sink_name=mic_rnnoise_out \
-        sink_properties=device.description='"Microphone RNNoise Output"' \
-        master="$MIC_SOURCE" \
-        plugin=rnnoise_ladspa \
-        label=noise_suppressor_mono
+        sink_name=mic_raw_in \
+        sink_master=mic_denoised_out \
+        plugin=/usr/lib/ladspa/librnnoise_ladspa.so \
+        label=noise_suppressor_mono \
+        control=50
+    
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}❌ Failed to load RNNoise LADSPA sink${NC}"
+        pactl unload-module module-null-sink 2>/dev/null || true
+        setup_pulseaudio_noise_reduction
+        return $?
+    fi
+    
+    # Create loopback from microphone to RNNoise input
+    pactl load-module module-loopback \
+        source="$MIC_SOURCE" \
+        sink=mic_raw_in \
+        channels=1 \
+        source_dont_move=true \
+        sink_dont_move=true
+    
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}❌ Failed to create loopback${NC}"
+        pactl unload-module module-ladspa-sink 2>/dev/null || true
+        pactl unload-module module-null-sink 2>/dev/null || true
+        setup_pulseaudio_noise_reduction
+        return $?
+    fi
+    
+    # Create remapped source for applications to use
+    pactl load-module module-remap-source \
+        source_name=mic_denoised \
+        source_properties=device.description='"Microphone (RNNoise Denoised)"' \
+        master=mic_denoised_out.monitor \
+        channels=1
     
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✅ RNNoise activated${NC}"
-        echo -e "${CYAN}AI-based noise reduction is now active${NC}"
+        # Set the denoised microphone as default
+        pactl set-default-source mic_denoised
+        
+        echo -e "${GREEN}✅ RNNoise AI noise reduction activated${NC}"
+        echo -e "${CYAN}New denoised microphone: mic_denoised${NC}"
+        echo -e "${CYAN}You can now use this in Discord, Zoom, OBS, etc.${NC}"
         
         # Send notification
         notify-send -h string:mic-noise:control -t 3000 "🤖 AI Noise Reduction" "RNNoise AI noise suppression activated"
         return 0
     else
-        echo -e "${RED}❌ Failed to setup RNNoise${NC}"
-        return 1
+        echo -e "${RED}❌ Failed to create remapped source${NC}"
+        # Clean up on failure
+        pactl unload-module module-loopback 2>/dev/null || true
+        pactl unload-module module-ladspa-sink 2>/dev/null || true
+        pactl unload-module module-null-sink 2>/dev/null || true
+        setup_pulseaudio_noise_reduction
+        return $?
     fi
 }
 
@@ -196,13 +246,22 @@ EOF
     notify-send -h string:mic-noise:control -t 3000 "🎛️ EasyEffects" "Advanced audio processing preset created"
 }
 
+# Function to quietly remove noise reduction (for internal use)
+remove_noise_reduction_quiet() {
+    # Unload all possible noise reduction modules
+    pactl unload-module module-echo-cancel 2>/dev/null || true
+    pactl unload-module module-ladspa-sink 2>/dev/null || true
+    pactl unload-module module-remap-source 2>/dev/null || true
+    pactl unload-module module-loopback 2>/dev/null || true
+    pactl unload-module module-null-sink 2>/dev/null || true
+}
+
 # Function to remove noise reduction
 remove_noise_reduction() {
     echo -e "${BLUE}Removing noise reduction modules...${NC}"
     
-    # Unload PulseAudio modules
-    pactl unload-module module-echo-cancel 2>/dev/null || true
-    pactl unload-module module-ladspa-sink 2>/dev/null || true
+    # Unload all noise reduction modules
+    remove_noise_reduction_quiet
     
     # Reset default source
     pactl set-default-source "$MIC_SOURCE"
@@ -248,13 +307,47 @@ show_status() {
     current_source=$(pactl get-default-source)
     echo -e "${CYAN}Current default microphone:${NC} $current_source"
     
+    # Check if RNNoise is active
+    if pactl list modules short | grep -q "module-remap-source"; then
+        echo -e "${GREEN}✅ RNNoise AI noise reduction is ACTIVE${NC}"
+        echo -e "${CYAN}   Denoised microphone: mic_denoised${NC}"
+    elif pactl list modules short | grep -q "module-echo-cancel"; then
+        echo -e "${GREEN}✅ Basic noise reduction is ACTIVE${NC}"
+        echo -e "${CYAN}   Denoised microphone: mic_denoised${NC}"
+    else
+        echo -e "${YELLOW}⚠️  No noise reduction is active${NC}"
+    fi
+    
     # Show loaded modules
     echo -e "${CYAN}Loaded noise reduction modules:${NC}"
-    pactl list modules short | grep -E "(echo-cancel|ladspa|rnnoise)" || echo "  None"
+    pactl list modules short | grep -E "(echo-cancel|ladspa|rnnoise|remap-source|loopback|null-sink)" || echo "  None"
     
     # Show available sources
     echo -e "${CYAN}Available microphone sources:${NC}"
-    pactl list sources short | grep -E "(input|mic)" || echo "  None found"
+    pactl list sources short | while read -r line; do
+        source_id=$(echo "$line" | awk '{print $1}')
+        source_name=$(echo "$line" | awk '{print $2}')
+        source_state=$(echo "$line" | awk '{print $5}')
+        
+        if echo "$source_name" | grep -qE "(input|mic|denoised)" && ! echo "$source_name" | grep -q "monitor"; then
+            if [ "$source_name" = "$current_source" ]; then
+                echo -e "  ${GREEN}► $source_name${NC} (current default)"
+            else
+                echo "  $source_name"
+            fi
+        fi
+    done
+    
+    # Check RNNoise availability
+    echo ""
+    echo -e "${CYAN}RNNoise Status:${NC}"
+    if ls /usr/lib/ladspa/librnnoise_ladspa.so >/dev/null 2>&1; then
+        echo -e "${GREEN}✅ RNNoise LADSPA plugin is available${NC}"
+        echo -e "${CYAN}   Location: /usr/lib/ladspa/librnnoise_ladspa.so${NC}"
+    else
+        echo -e "${RED}❌ RNNoise LADSPA plugin not found${NC}"
+        echo -e "${CYAN}   Run: ./mic-noise-reduction.sh rnnoise${NC}"
+    fi
     
     # Show recommendations
     echo ""
@@ -262,8 +355,8 @@ show_status() {
     echo "• Use a quiet environment"
     echo "• Position microphone 6-8 inches from your mouth"
     echo "• Avoid fans, air conditioning, and electronic devices"
-    echo "• Use noise reduction for consistent background noise"
-    echo "• Use EasyEffects for advanced processing"
+    echo "• Use 'rnnoise' command for AI-powered noise suppression"
+    echo "• Use 'easyeffects' for advanced processing"
 }
 
 # Function to create post-processing script for Audacity
@@ -336,21 +429,32 @@ case "${1:-help}" in
         echo -e "${BLUE}🎤 Microphone Noise Reduction Control${NC}"
         echo ""
         echo -e "${YELLOW}REAL-TIME NOISE REDUCTION:${NC}"
-        echo "  enable/on/start    - Enable basic PulseAudio noise reduction"
-        echo "  rnnoise/ai         - Enable AI-based RNNoise suppression"
+        echo "  enable/on/start      - Enable basic PulseAudio noise reduction"
+        echo "  rnnoise/ai           - Enable AI-based RNNoise suppression (RECOMMENDED)"
         echo "  easyeffects/advanced - Setup EasyEffects for advanced processing"
-        echo "  disable/off/stop   - Disable all noise reduction"
+        echo "  disable/off/stop     - Disable all noise reduction"
         echo ""
         echo -e "${YELLOW}UTILITIES:${NC}"
-        echo "  test/check         - Test microphone quality"
-        echo "  status/show        - Show current noise reduction status"
-        echo "  audacity/guide     - Create Audacity noise removal guide"
+        echo "  test/check           - Test microphone quality"
+        echo "  status/show          - Show current noise reduction status"
+        echo "  audacity/guide       - Create Audacity noise removal guide"
+        echo ""
+        echo -e "${YELLOW}QUICK START:${NC}"
+        echo -e "${GREEN}  ./mic-noise-reduction.sh rnnoise${NC}     - Best option for most users"
+        echo -e "${CYAN}  ./mic-noise-reduction.sh status${NC}      - Check what's currently active"
+        echo -e "${CYAN}  ./mic-noise-reduction.sh test${NC}        - Test your microphone"
+        echo ""
+        echo -e "${YELLOW}WHAT IS RNNoise?${NC}"
+        echo "• AI-powered noise suppression using neural networks"
+        echo "• Removes background noise, fans, typing, etc."
+        echo "• Works with Discord, Zoom, OBS, and all applications"
+        echo "• Much better than basic noise reduction"
         echo ""
         echo -e "${YELLOW}RECOMMENDATIONS:${NC}"
-        echo "• Start with 'enable' for basic noise reduction"
-        echo "• Use 'rnnoise' for AI-powered noise suppression"
+        echo "• Start with 'rnnoise' for best AI-powered noise suppression"
         echo "• Use 'easyeffects' for professional audio processing"
         echo "• Use 'audacity' for post-processing recorded files"
+        echo "• Use 'disable' to return to original microphone"
         echo ""
         echo -e "${CYAN}Current Status:${NC}"
         show_status
