@@ -5,20 +5,20 @@ return {
 		dependencies = {
 			"MunifTanjim/nui.nvim",
 		},
-					opts = {
-				lsp = {
-					override = {
-						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-						["vim.lsp.util.stylize_markdown"] = true,
-						["cmp.entry.get_documentation"] = true,
-					},
+		opts = {
+			lsp = {
+				override = {
+					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+					["vim.lsp.util.stylize_markdown"] = true,
+					["cmp.entry.get_documentation"] = true,
 				},
-				cmdline = { view = "cmdline" },
-				notify = { enabled = false },
-				messages = { enabled = false },
-				popupmenu = { enabled = false },
-				presets = { lsp_doc_border = true },
 			},
+			cmdline = { view = "cmdline" },
+			notify = { enabled = false },
+			messages = { enabled = false },
+			popupmenu = { enabled = false },
+			presets = { lsp_doc_border = true },
+		},
 		config = function(_, opts)
 			require("noice").setup(opts)
 			vim.keymap.set("n", "<leader>nh", ":Noice history<CR>", { silent = true, desc = "Noice history" })
@@ -29,7 +29,7 @@ return {
 		"stevearc/aerial.nvim",
 		cmd = { "AerialToggle", "AerialOpen" },
 		opts = {
-			backends = {"treesitter", "markdown" },
+			backends = { "lsp", "treesitter", "markdown" },
 			attach_mode = "global",
 			show_guides = true,
 		},
@@ -62,6 +62,11 @@ return {
 	},
 	{
 		"HiPhish/rainbow-delimiters.nvim",
+		enabled = false,
 		event = { "BufReadPost", "BufNewFile" },
+		config = function()
+			vim.g.rainbow_delimiters = vim.g.rainbow_delimiters or {}
+			vim.g.rainbow_delimiters.blacklist = { "Avante", "go" }
+		end,
 	},
 } 
