@@ -24,4 +24,4 @@
 ## Git / Diff
 - Open diffview: `<leader>gd`
 - Close diffview: `<leader>gD`
-- File history (diffview): `<leader>gh` 
+- File history (diffview): `<leader>gh`

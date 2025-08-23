@@ -37,4 +37,4 @@ return {
 			vim.keymap.set("n", "<leader>du", function() dapui.toggle() end, { desc = "DAP UI Toggle" })
 		end,
 	},
-} 
+}

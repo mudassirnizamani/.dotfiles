@@ -13,4 +13,4 @@ return {
 		event = { "BufReadPost", "BufNewFile" },
 		opts = {},
 	},
-} 
+}

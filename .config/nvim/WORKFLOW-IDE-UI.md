@@ -20,4 +20,6 @@ This setup adds a modern UI/UX layer over core Neovim.
 
 ## Tips
 - Pair Aerial with Telescope for quick symbol fuzzy search.
-- Use folds to collapse long regions (tests/vendor) and focus your edits. 
+- Use folds to collapse long regions (tests/vendor) and focus your edits.
+
+</rewritten_file>

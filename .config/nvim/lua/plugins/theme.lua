@@ -10,7 +10,7 @@ return {
         overrides = {},  -- A dictionary of group names, each associated with a dictionary of parameters (`bg`, `fg`, `sp` and `style`) and colors in hex.
       })
 
-      -- vim.cmd("colorscheme ayu")
+      vim.cmd("colorscheme ayu")
     end
   },
   {
@@ -46,7 +46,7 @@ return {
     },
     config = function(_, opts)
       require("flow").setup(opts)
-      vim.cmd "colorscheme flow"
+      -- vim.cmd "colorscheme flow"
     end,
   },
   {
@@ -71,17 +71,6 @@ return {
     lazy = false,
     config = function()
       -- vim.cmd("colorscheme kanagawa-wave")
-    end
-  },
-  {
-    "navarasu/onedark.nvim",
-    lazy = false,
-    config = function()
-      require('onedark').setup {
-        style = 'warmer'
-      }
-
-      -- vim.cmd("colorscheme onedark")
     end
   },
   {

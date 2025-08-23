@@ -29,7 +29,7 @@ return {
 		"stevearc/aerial.nvim",
 		cmd = { "AerialToggle", "AerialOpen" },
 		opts = {
-			backends = { "lsp", "treesitter", "markdown" },
+			backends = {"treesitter", "markdown" },
 			attach_mode = "global",
 			show_guides = true,
 		},

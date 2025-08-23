@@ -2,9 +2,9 @@ return {
 	{
 		"gbprod/yanky.nvim",
 		event = { "BufReadPost", "BufNewFile" },
-					opts = {
-				ring_history = { length = 100 },
-			},
+		opts = {
+			ring_history = { length = 100 },
+		},
 		config = function(_, opts)
 			require("yanky").setup(opts)
 			vim.keymap.set({ "n", "x" }, "p", "<Plug>(YankyPutAfter)")
@@ -37,4 +37,4 @@ return {
 			end, { desc = "Toggle lsp_lines" })
 		end,
 	},
-} 
+}

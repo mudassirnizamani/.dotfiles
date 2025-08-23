@@ -35,17 +35,15 @@ return {
 				},
 				git_status = {
 					symbols = {
-						-- Change type
-						added = "",
-						deleted = "",
-						modified = "",
-						renamed = "",
-						-- Status type
-						untracked = "",
-						ignored = "",
-						unstaged = "",
-						staged = "",
-						conflict = "",
+						added = "A",
+						deleted = "D",
+						modified = "M",
+						renamed = "R",
+						untracked = "?",
+						ignored = "I",
+						unstaged = "U",
+						staged = "S",
+						conflict = "C",
 					},
 				},
 			},
@@ -55,6 +53,8 @@ return {
 			},
 			filesystem = {
 				use_libuv_file_watcher = true,
+				follow_current_file = { enabled = true },
+				bind_to_cwd = true,
 				filtered_items = {
 					hide_dotfiles = false,
 					hide_gitignored = false,

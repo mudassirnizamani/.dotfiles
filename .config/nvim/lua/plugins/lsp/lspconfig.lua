@@ -166,6 +166,61 @@ return { -- LSP Configuration & Plugins
 					},
 				},
 			},
+			-- C/C++
+			clangd = {
+				capabilities = { offsetEncoding = { "utf-16" } },
+			},
+			-- Python (types with Pyright, lint/fixes with Ruff LSP)
+			pyright = {
+				settings = {
+					python = {
+						analysis = {
+							typeCheckingMode = "basic",
+							autoImportCompletions = true,
+						},
+					},
+				},
+			},
+			ruff = {},
+			-- Go
+			gopls = {
+				settings = {
+					gopls = {
+						gofumpt = true,
+						staticcheck = true,
+						completeUnimported = true,
+					},
+				},
+			},
+			-- TypeScript/JavaScript
+			vtsls = {
+				filetypes = {
+					"javascript",
+					"javascriptreact",
+					"javascript.jsx",
+					"typescript",
+					"typescriptreact",
+					"typescript.tsx",
+				},
+				settings = {
+					vtsls = {
+						autoUseWorkspaceTsdk = true,
+						enableMoveToFileCodeAction = true,
+					},
+					typescript = {
+						updateImportsOnFileMove = { enabled = "always" },
+						suggest = { completeFunctionCalls = true },
+						inlayHints = {
+							parameterTypes = { enabled = true },
+							parameterNames = { enabled = "literals" },
+							variableTypes = { enabled = false },
+							functionLikeReturnTypes = { enabled = true },
+							propertyDeclarationTypes = { enabled = true },
+							enumMemberValues = { enabled = true },
+						},
+					},
+				},
+			},
 		}
 
 		-- Ensure the servers and tools above are installed
@@ -193,6 +248,14 @@ return { -- LSP Configuration & Plugins
 					-- certain features of an LSP (for example, turning off formatting for tsserver)
 					server.capabilities = vim.tbl_deep_extend("force", {}, capabilities,
 						server.capabilities or {})
+					-- Prefer Pyright hover over Ruff's to avoid duplicate hovers
+					if server_name == "ruff_lsp" then
+						local prev_on_attach = server.on_attach
+						server.on_attach = function(client, bufnr)
+							client.server_capabilities.hoverProvider = false
+							if prev_on_attach then prev_on_attach(client, bufnr) end
+						end
+					end
 					require("lspconfig")[server_name].setup(server)
 				end,
 			},

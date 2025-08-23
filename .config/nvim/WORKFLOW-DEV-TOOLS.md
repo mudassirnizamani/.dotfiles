@@ -19,4 +19,4 @@
 
 ## Tips
 - Combine yank history with diffview to stage and refine changes.
-- Keep lsp_lines off generally (virtual_text on), and enable it when triaging errors. 
+- Keep lsp_lines off generally (virtual_text on), and enable it when triaging errors.
