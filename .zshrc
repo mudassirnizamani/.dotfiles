@@ -66,3 +66,6 @@ eval "$(direnv hook zsh)"
 
 alias ls="exa --color always --header --icons"
 export CHROME_EXECUTABLE=/usr/bin/google-chrome-stable
+
+# Created by `pipx` on 2025-08-23 03:44:23
+export PATH="$PATH:/home/mujheri/.local/bin"
