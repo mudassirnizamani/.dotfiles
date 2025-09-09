@@ -93,4 +93,3 @@ keybind = ctrl+physical:nine=goto_tab:9
 keybind = ctrl+physical:five=goto_tab:5
 keybind = ctrl+physical:seven=goto_tab:7
 keybind = ctrl+physical:two=goto_tab:2
-keybind = shift+enter=text:\x1b\r

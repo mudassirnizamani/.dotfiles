@@ -17,6 +17,7 @@ return {
       wk.add({
         { '<leader>a', group = '[A]vante' },
         { '<leader>c', group = '[C]ode' },
+        { '<leader>cc', group = 'Claude Code' },
         { '<leader>d', group = '[D]ebug' },
         { '<leader>e', group = '[E]xplorer' },
         { '<leader>f', group = '[F]ind' },
