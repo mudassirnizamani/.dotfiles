@@ -26,17 +26,8 @@ return {
 		require("luasnip.loaders.from_vscode").lazy_load()
 
 		cmp.setup({
-			performance = {
-				debounce = 30,
-				throttle = 10,
-				fetching_timeout = 200,
-			},
 			completion = {
 				completeopt = "menu,menuone,preview,noselect",
-				keyword_length = 2, -- Start completion after 2 characters
-			},
-			experimental = {
-				ghost_text = true, -- Show preview of completion inline
 			},
 			snippet = { -- configure how nvim-cmp interacts with snippet engine
 				expand = function(args)
@@ -59,20 +50,6 @@ return {
 				{ name = "buffer", priority = 500, max_item_count = 5 }, -- text within current buffer
 				{ name = "path", priority = 250 }, -- file system paths
 			}),
-			sorting = {
-				priority_weight = 2,
-				comparators = {
-					cmp.config.compare.offset,
-					cmp.config.compare.exact,
-					cmp.config.compare.score,
-					cmp.config.compare.recently_used,
-					cmp.config.compare.locality,
-					cmp.config.compare.kind,
-					cmp.config.compare.sort_text,
-					cmp.config.compare.length,
-					cmp.config.compare.order,
-				},
-			},
 
 			-- configure lspkind for vs-code like pictograms in completion menu
 			formatting = {

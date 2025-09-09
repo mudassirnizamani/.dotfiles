@@ -7,19 +7,46 @@ return { -- LSP Configuration & Plugins
 	-- },
 	dependencies = {
 		-- Automatically install LSPs and related tools to stdpath for Neovim
-		{ "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
+		"williamboman/mason.nvim", -- NOTE: Must be loaded before dependants
 		"williamboman/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 
 		-- Useful status updates for LSP.
 		-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-		{ "j-hui/fidget.nvim",       opts = {} },
+		{ "j-hui/fidget.nvim", opts = {} },
 
 		-- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
 		-- used for completion, annotations and signatures of Neovim apis
-		{ "folke/neodev.nvim",       opts = {} },
+		{ "folke/neodev.nvim", opts = {} },
 	},
 	config = function()
+		-- Configure LSP diagnostics for better display
+		vim.diagnostic.config({
+			virtual_text = {
+				spacing = 4,
+				source = "if_many",
+				prefix = "●",
+			},
+			float = {
+				source = "always",
+				border = "rounded",
+			},
+			signs = true,
+			underline = true,
+			update_in_insert = false,
+			severity_sort = true,
+		})
+
+		-- Configure LSP handlers with borders
+		vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+			border = "rounded",
+			width = 80,
+		})
+
+		vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+			border = "rounded",
+		})
+
 		--  This function gets run when an LSP attaches to a particular buffer.
 		--    That is to say, every time a new file is opened that is associated with
 		--    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
@@ -128,12 +155,7 @@ return { -- LSP Configuration & Plugins
 		--  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
 		local capabilities = vim.lsp.protocol.make_client_capabilities()
 		capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-		
-		-- Performance: Enable folding capabilities for nvim-ufo
-		capabilities.textDocument.foldingRange = {
-			dynamicRegistration = false,
-			lineFoldingOnly = true
-		}
+
 
 		-- Enable the following language servers
 		--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -227,6 +249,8 @@ return { -- LSP Configuration & Plugins
 					},
 				},
 			},
+			-- Prisma
+			prismals = {},
 		}
 
 		-- Ensure the servers and tools above are installed
@@ -235,7 +259,7 @@ return { -- LSP Configuration & Plugins
 		--    :Mason
 		--
 		--  You can press `g?` for help in this menu.
-		require("mason").setup()
+		-- Note: mason.setup() is handled in mason.lua
 
 		-- You can add other tools here that you want Mason to install
 		-- for you, so that they are available from within Neovim.
@@ -246,6 +270,7 @@ return { -- LSP Configuration & Plugins
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
 		require("mason-lspconfig").setup({
+			ensure_installed = vim.tbl_keys(servers),
 			handlers = {
 				function(server_name)
 					local server = servers[server_name] or {}

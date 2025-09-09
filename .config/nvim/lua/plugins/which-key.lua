@@ -15,9 +15,9 @@ return {
 
       -- Document key groups so pressing <leader> shows organized sections
       wk.add({
-        { '<leader>a', group = '[A]vante' },
+        { '<leader>a', group = '[A]I/Claude Code' },
+        { '<leader>v', group = 'A[v]ante' },
         { '<leader>c', group = '[C]ode' },
-        { '<leader>cc', group = 'Claude Code' },
         { '<leader>d', group = '[D]ebug' },
         { '<leader>e', group = '[E]xplorer' },
         { '<leader>f', group = '[F]ind' },

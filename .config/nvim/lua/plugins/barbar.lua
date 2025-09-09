@@ -39,9 +39,18 @@ return {
 		vim.g.barbar_auto_setup = false
 	end,
 	config = function()
-		local barbar = require("barbar")
+		-- Disable swap file warnings for better barbar experience
+		vim.opt.shortmess:append("A")
 
-		barbar.setup({
+		-- Wrap barbar setup in pcall to handle potential compatibility issues
+		local ok, barbar = pcall(require, "barbar")
+		if not ok then
+			vim.notify("Failed to load barbar.nvim", vim.log.levels.WARN)
+			return
+		end
+
+		local setup_ok, err = pcall(function()
+			barbar.setup({
 			clickable = true, -- Enables/disables clickable tabs
 			tabpages = false, -- Enable/disables current/total tabpages indicator (top right corner)
 			insert_at_end = true,
@@ -56,7 +65,13 @@ return {
 					deleted = { enabled = true, icon = "-" },
 				},
 			},
-		})
+			})
+		end)
+		
+		if not setup_ok then
+			vim.notify("Barbar setup failed: " .. tostring(err), vim.log.levels.WARN)
+			return
+		end
 
 		-- key maps
 
