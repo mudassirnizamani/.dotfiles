@@ -87,17 +87,17 @@ return {
 		end
 
 		-- Only allow edits when explicitly enabled
-		vim.keymap.set("n", "<leader>ae", function()
+		vim.keymap.set("n", "<leader>ve", function()
 			set_mode("agentic")
 		end, { desc = "Avante: enable agentic (allow edits)" })
 
 		-- Go back to safe mode (no auto-edits)
-		vim.keymap.set("n", "<leader>ad", function()
+		vim.keymap.set("n", "<leader>vd", function()
 			set_mode("legacy")
 		end, { desc = "Avante: legacy mode (no auto edits)" })
 
 		-- Open/Toggle Avante chat UI (falls back to :Avante if available)
-		vim.keymap.set("n", "<leader>ao", function()
+		vim.keymap.set("n", "<leader>vo", function()
 			if vim.fn.exists(":Avante") == 2 then
 				vim.cmd("Avante")
 			else
@@ -113,10 +113,10 @@ return {
 			end
 			pcall(function() require("avante").ask() end)
 		end
-		vim.keymap.set({ "n", "v" }, "<leader>ax", avante_ask, { desc = "Avante: ask (uses selection if visual)" })
+		vim.keymap.set({ "n", "v" }, "<leader>vx", avante_ask, { desc = "Avante: ask (uses selection if visual)" })
 
 		-- Model picker (simple toggle between gpt5 and gemini to avoid copilot list)
-		vim.keymap.set("n", "<leader>am", function()
+		vim.keymap.set("n", "<leader>vm", function()
 			local ok, cfg = pcall(require, "avante.config")
 			if not ok or type(cfg) ~= "table" then
 				vim.notify("Avante: config not available", vim.log.levels.WARN)
@@ -129,7 +129,7 @@ return {
 		end, { desc = "Avante: toggle provider (gpt5↔gemini)" })
 
 		-- Copy helper: open current Avante sidebar buffer contents in a scratch split for copying
-		vim.keymap.set("n", "<leader>aC", function()
+		vim.keymap.set("n", "<leader>vC", function()
 			for _, win in ipairs(vim.api.nvim_list_wins()) do
 				local buf = vim.api.nvim_win_get_buf(win)
 				local ft = vim.bo[buf].filetype
@@ -158,7 +158,7 @@ return {
 			table.sort(list)
 			vim.api.nvim_buf_set_lines(vim.g.avante_selected_buf, 0, -1, false, list)
 		end
-		vim.keymap.set("n", "<leader>ab", function()
+		vim.keymap.set("n", "<leader>vb", function()
 			if vim.g.avante_selected_win and vim.api.nvim_win_is_valid(vim.g.avante_selected_win) then
 				vim.api.nvim_win_close(vim.g.avante_selected_win, true)
 				vim.g.avante_selected_win, vim.g.avante_selected_buf = nil, nil
@@ -183,13 +183,13 @@ return {
 			local node = state.tree:get_node()
 			return node and node:get_id() or nil
 		end
-		vim.keymap.set("n", "<leader>a+", function()
+		vim.keymap.set("n", "<leader>v+", function()
 			-- Attempt Avante's extension first if present
 			pcall(function() require("avante.extensions.nvim_tree").add_file() end)
 			local p = get_neotree_path()
 			if p then selected[p] = true refresh_selected_view() end
 		end, { desc = "Avante: select file (Neo-tree)" })
-		vim.keymap.set("n", "<leader>a-", function()
+		vim.keymap.set("n", "<leader>v-", function()
 			pcall(function() require("avante.extensions.nvim_tree").remove_file() end)
 			local p = get_neotree_path()
 			if p then selected[p] = nil refresh_selected_view() end
