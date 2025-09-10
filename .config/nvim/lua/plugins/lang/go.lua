@@ -1,56 +1,51 @@
 return {
-    "ray-x/navigator.lua",
-    dependencies = {
-        { "hrsh7th/nvim-cmp" }, { "nvim-treesitter/nvim-treesitter" },
-        { "ray-x/guihua.lua", run = "cd lua/fzy && make" }, {
+    {
         "ray-x/go.nvim",
+        dependencies = {
+            "ray-x/guihua.lua",
+            "neovim/nvim-lspconfig",
+            "nvim-treesitter/nvim-treesitter",
+        },
         event = { "CmdlineEnter" },
         ft = { "go", "gomod" },
-        build = ':lua require("go.install").update_all_sync()'
-    }, {
-        "ray-x/lsp_signature.nvim", -- Show function signature when you type
-        event = "VeryLazy",
-        config = function() require("lsp_signature").setup() end
-    }
+        build = ':lua require("go.install").update_all_sync()',
+        config = function()
+            require("go").setup({
+                goimports = 'gopls', -- Use gopls for imports
+                fillstruct = 'gopls', -- Use gopls for struct filling
+                dap_debug = false, -- Disable DAP to avoid conflicts
+                dap_debug_gui = false,
+                lsp_cfg = false, -- Don't let go.nvim configure LSP
+                lsp_gofumpt = true,
+                lsp_on_attach = false, -- Don't override LSP attach
+                trouble = false, -- Use existing trouble config
+                luasnip = true,
+            })
+        end,
     },
-    config = function()
-        require("go").setup()
-        require("navigator").setup({
-            lsp_signature_help = true, -- enable ray-x/lsp_signature
-            lsp = { 
-                format_on_save = true,
-                disable_lsp = false  -- Enable LSP for proper syntax highlighting
-            }
-        })
-
-        vim.api.nvim_create_autocmd("FileType", {
-            pattern = { "go" },
-            callback = function(ev)
-                -- CTRL/control keymaps
-                vim.api
-                        .nvim_buf_set_keymap(0, "n", "<C-i>", ":GoImport<CR>", {})
-                vim.api.nvim_buf_set_keymap(0, "n", "<C-b>", ":GoBuild %:h<CR>",
-                    {})
-                vim.api.nvim_buf_set_keymap(0, "n", "<C-t>", ":GoTestPkg<CR>",
-                    {})
-                vim.api.nvim_buf_set_keymap(0, "n", "<C-c>",
-                    ":GoCoverage -p<CR>", {})
-
-                -- Opens test files
-                -- vim.api.nvim_buf_set_keymap(0, "n", "A",
-                --     ":lua require('go.alternate').switch(true, '')<CR>",
-                --     {}) -- Test
-                --
-                -- vim.api.nvim_buf_set_keymap(0, "n", "V",
-                --     ":lua require('go.alternate').switch(true, 'vsplit')<CR>",
-                --     {}) -- Test Vertical
-                --
-                -- vim.api.nvim_buf_set_keymap(0, "n", "S",
-                --     ":lua require('go.alternate').switch(true, 'split')<CR>",
-                --     {}) -- Test Split
-            end,
-            group = vim.api.nvim_create_augroup("go_autocommands",
-                { clear = true })
-        })
-    end
+    {
+        "ray-x/lsp_signature.nvim",
+        event = "VeryLazy",
+        config = function() 
+            require("lsp_signature").setup({
+                bind = true,
+                handler_opts = {
+                    border = "rounded"
+                }
+            }) 
+        end
+    }
 }
+
+-- Go keymaps autocmd (outside the plugin table)
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "go" },
+    callback = function(ev)
+        -- CTRL/control keymaps for Go
+        vim.api.nvim_buf_set_keymap(0, "n", "<C-i>", ":GoImport<CR>", {})
+        vim.api.nvim_buf_set_keymap(0, "n", "<C-b>", ":GoBuild %:h<CR>", {})
+        vim.api.nvim_buf_set_keymap(0, "n", "<C-t>", ":GoTestPkg<CR>", {})
+        vim.api.nvim_buf_set_keymap(0, "n", "<C-c>", ":GoCoverage -p<CR>", {})
+    end,
+    group = vim.api.nvim_create_augroup("go_autocommands", { clear = true })
+})
