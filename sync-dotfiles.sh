@@ -21,10 +21,12 @@ DOTFILES_CONFIG_DIR="$DOTFILES_DIR/.config"
 
 # Function to print colored output
 print_status() {
+    [[ "$QUIET" == "true" ]] && return
     echo -e "${BLUE}[INFO]${NC} $1"
 }
 
 print_success() {
+    [[ "$QUIET" == "true" ]] && return
     echo -e "${GREEN}[SUCCESS]${NC} $1"
 }
 
@@ -34,6 +36,22 @@ print_warning() {
 
 print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
+}
+
+print_verbose() {
+    [[ "$VERBOSE" == "true" ]] && echo -e "${BLUE}[VERBOSE]${NC} $1"
+}
+
+# Function to create backup of files before sync
+create_backup() {
+    local file="$1"
+    local backup_dir="$HOME/.dotfiles-backup/$(date +%Y%m%d_%H%M%S)"
+    local rel_path="${file#$HOME/.config/}"
+    local backup_file="$backup_dir/$rel_path"
+
+    mkdir -p "$(dirname "$backup_file")"
+    cp -p "$file" "$backup_file"
+    print_verbose "Backed up: $rel_path"
 }
 
 # Function to check if a file should be ignored
@@ -48,6 +66,14 @@ should_ignore() {
         "*~"
         ".DS_Store"
         "Thumbs.db"
+        "*.log"
+        "*.cache"
+        "node_modules"
+        "__pycache__"
+        ".pytest_cache"
+        ".mypy_cache"
+        "*.pyc"
+        "*.pyo"
     )
     
     for pattern in "${ignore_patterns[@]}"; do
@@ -110,19 +136,25 @@ sync_config_dir() {
         local dotfiles_file="$dotfiles_dir/$rel_path"
         local dotfiles_file_dir="$(dirname "$dotfiles_file")"
         
+        # Create backup of important files
+        if [[ "$VERBOSE" == "true" ]]; then
+            create_backup "$file"
+        fi
+
         # Create directory structure if needed
         mkdir -p "$dotfiles_file_dir"
-        
+
         # Copy file maintaining permissions
         cp -p "$file" "$dotfiles_file"
-        print_status "Copied: $rel_path"
+        print_verbose "Copied: $rel_path"
+        [[ "$QUIET" != "true" ]] && print_status "Copied: $rel_path"
     done
     
     # Remove original files (they will be replaced by symlinks)
     for file in "${files_to_sync[@]}"; do
         if [[ ! -L "$file" ]]; then  # Only remove if it's not already a symlink
             rm "$file"
-            print_status "Removed original: ${file#$system_dir/}"
+            print_verbose "Removed original: ${file#$system_dir/}"
         fi
     done
     
@@ -133,45 +165,52 @@ sync_config_dir() {
 run_stow() {
     print_status "Running stow to create symlinks..."
     cd "$DOTFILES_DIR"
-    
-    if stow -v . 2>/dev/null; then
-        print_success "Stow completed successfully"
+
+    # Run stow with appropriate verbosity
+    if [[ "$VERBOSE" == "true" ]]; then
+        if stow -v .; then
+            print_success "Stow completed successfully"
+        else
+            print_error "Stow failed, there might be conflicts"
+            print_error "Try running: stow -v . manually to see details"
+            return 1
+        fi
+    elif [[ "$QUIET" == "true" ]]; then
+        if stow . >/dev/null 2>&1; then
+            print_success "Stow completed successfully"
+        else
+            print_error "Stow failed, there might be conflicts"
+            return 1
+        fi
     else
-        print_error "Stow failed, there might be conflicts"
-        return 1
+        if stow . 2>/dev/null; then
+            print_success "Stow completed successfully"
+        else
+            print_error "Stow failed, there might be conflicts"
+            print_error "Run with -v for detailed output"
+            return 1
+        fi
     fi
 }
 
-# Function to commit changes to git
-commit_changes() {
+# Function to show git status (no auto-commit)
+show_git_status() {
     cd "$DOTFILES_DIR"
-    
+
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        print_warning "Not in a git repository - skipping git status"
+        return 0
+    fi
+
     if [[ -n "$(git status --porcelain)" ]]; then
-        print_status "Committing changes to git..."
-        git add .
-        
-        # Create a commit message with timestamp
-        local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-        local commit_message="Auto-sync dotfiles - $timestamp"
-        
-        git commit -m "$commit_message"
-        print_success "Changes committed to git"
-        
-        # Ask if user wants to push
-        if [[ "$AUTO_PUSH" == "true" ]]; then
-            print_status "Auto-pushing to remote..."
-            git push origin main || git push origin master
-            print_success "Changes pushed to remote"
-        else
-            read -p "Do you want to push changes to remote? (y/N): " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                git push origin main || git push origin master
-                print_success "Changes pushed to remote"
-            fi
-        fi
+        [[ "$QUIET" != "true" ]] && print_status "Git changes detected:"
+        [[ "$QUIET" != "true" ]] && git status --short
+        [[ "$QUIET" != "true" ]] && echo
+        print_warning "📝 Changes are ready to be committed manually when you're ready."
+        [[ "$QUIET" != "true" ]] && print_status "💡 To commit: git add . && git commit -m 'your message'"
+        [[ "$QUIET" != "true" ]] && print_status "🚀 To push: git push origin main"
     else
-        print_status "No changes to commit"
+        print_success "✅ No git changes detected"
     fi
 }
 
@@ -185,9 +224,9 @@ Usage: $0 [OPTIONS] [CONFIG_NAMES...]
 OPTIONS:
     -h, --help          Show this help message
     -n, --dry-run       Show what would be done without making changes
-    -a, --auto-push     Automatically push changes to git remote
     -s, --skip-stow     Skip running stow (useful for manual stow management)
-    -g, --skip-git      Skip git operations
+    -q, --quiet         Suppress non-essential output
+    -v, --verbose       Show detailed output
     
 CONFIG_NAMES:
     Specific configuration directories to sync (e.g., hypr, nvim, kitty)
@@ -197,16 +236,17 @@ Examples:
     $0                  # Sync all config directories
     $0 hypr nvim        # Sync only hypr and nvim
     $0 -n               # Dry run - show what would be synced
-    $0 -a               # Auto-push changes to git
+    $0 -q hypr          # Quietly sync only hypr config
+    $0 -v               # Verbose sync of all configs
     
 HELP_EOF
 }
 
 # Parse command line arguments
 DRY_RUN=false
-AUTO_PUSH=false
 SKIP_STOW=false
-SKIP_GIT=false
+QUIET=false
+VERBOSE=false
 CONFIG_DIRS=()
 
 while [[ $# -gt 0 ]]; do
@@ -219,16 +259,16 @@ while [[ $# -gt 0 ]]; do
             DRY_RUN=true
             shift
             ;;
-        -a|--auto-push)
-            AUTO_PUSH=true
-            shift
-            ;;
         -s|--skip-stow)
             SKIP_STOW=true
             shift
             ;;
-        -g|--skip-git)
-            SKIP_GIT=true
+        -q|--quiet)
+            QUIET=true
+            shift
+            ;;
+        -v|--verbose)
+            VERBOSE=true
             shift
             ;;
         -*)
@@ -328,10 +368,8 @@ main() {
         run_stow
     fi
     
-    # Commit changes if not skipped
-    if [[ "$SKIP_GIT" != "true" ]]; then
-        commit_changes
-    fi
+    # Show git status (no auto-commit)
+    show_git_status
     
     print_success "Dotfiles sync completed successfully!"
 }
