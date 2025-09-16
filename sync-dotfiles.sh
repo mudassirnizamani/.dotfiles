@@ -159,6 +159,9 @@ sync_config_dir() {
     done
     
     print_success "Synced $config_name successfully"
+
+    # Check dependencies after successful sync
+    check_dependencies "$config_name"
 }
 
 # Function to run stow
@@ -211,6 +214,46 @@ show_git_status() {
         [[ "$QUIET" != "true" ]] && print_status "🚀 To push: git push origin main"
     else
         print_success "✅ No git changes detected"
+    fi
+}
+
+# Function to check package dependencies
+check_dependencies() {
+    local config_name="$1"
+    [[ "$QUIET" == "true" ]] && return 0
+
+    print_verbose "Checking dependencies for $config_name..."
+
+    # Define package requirements for each config
+    declare -A config_deps=(
+        ["hypr"]="hyprland waybar wofi mako"
+        ["nvim"]="neovim"
+        ["wezterm"]="wezterm"
+        ["ghostty"]="ghostty"
+        ["kitty"]="kitty"
+        ["alacritty"]="alacritty"
+        ["i3"]="i3-wm i3blocks i3status"
+        ["polybar"]="polybar"
+        ["rofi"]="rofi"
+        ["waybar"]="waybar"
+        ["mako"]="mako"
+    )
+
+    if [[ -n "${config_deps[$config_name]}" ]]; then
+        local missing_packages=()
+        for package in ${config_deps[$config_name]}; do
+            if ! pacman -Qi "$package" &>/dev/null; then
+                missing_packages+=("$package")
+            fi
+        done
+
+        if [[ ${#missing_packages[@]} -gt 0 ]]; then
+            print_warning "⚠️  Missing packages for $config_name: ${missing_packages[*]}"
+            print_status "💡 Install with: sudo pacman -S ${missing_packages[*]}"
+            print_status "🚀 Or run: ./install.sh $config_name"
+        else
+            print_verbose "✅ All dependencies for $config_name are installed"
+        fi
     fi
 }
 

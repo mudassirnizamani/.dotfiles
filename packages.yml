@@ -1,0 +1,160 @@
+# Package Dependencies for Dotfiles
+# This file defines all packages needed for your dotfile configurations
+
+# Core system packages (always installed)
+core:
+  - base-devel
+  - git
+  - stow
+  - curl
+  - wget
+  - unzip
+  - tree
+  - htop
+  - btop
+  - neofetch
+
+# Terminal and shell tools
+terminal:
+  - fish
+  - zsh
+  - starship
+  - zoxide
+  - eza
+  - bat
+  - ripgrep
+  - fd
+  - fzf
+  - tmux
+  - ranger
+  - lf
+  - nnn
+
+# Terminal emulators
+terminal_emulators:
+  - alacritty
+  - kitty
+  - wezterm
+  - ghostty  # AUR package
+
+# Development tools
+development:
+  - neovim
+  - code
+  - docker
+  - docker-compose
+  - nodejs
+  - npm
+  - python
+  - python-pip
+  - rustup
+  - go
+  - jq
+  - yq
+
+# Window manager and desktop
+desktop:
+  - hyprland
+  - waybar
+  - wofi
+  - rofi
+  - mako
+  - swaylock
+  - wlogout
+  - grim
+  - slurp
+  - swappy
+  - wl-clipboard
+  - xdg-desktop-portal-hyprland
+  - pipewire
+  - pipewire-alsa
+  - pipewire-pulse
+  - wireplumber
+
+# i3 window manager (fallback)
+i3wm:
+  - i3-wm
+  - i3blocks
+  - i3status
+  - i3lock
+  - dmenu
+  - polybar
+  - picom
+  - feh
+  - scrot
+  - xclip
+
+# Fonts
+fonts:
+  - ttf-jetbrains-mono-nerd
+  - ttf-fira-code
+  - noto-fonts
+  - noto-fonts-emoji
+  - ttf-liberation
+  - adobe-source-code-pro-fonts
+
+# Media and graphics
+media:
+  - mpv
+  - firefox
+  - chromium
+  - obs-studio
+  - gimp
+  - inkscape
+  - imagemagick
+
+# System utilities
+utilities:
+  - networkmanager
+  - network-manager-applet
+  - blueman
+  - pavucontrol
+  - thunar
+  - file-roller
+  - gparted
+  - gnome-disk-utility
+
+# Optional packages (can be skipped)
+optional:
+  - discord
+  - spotify
+  - steam
+  - libreoffice-fresh
+  - thunderbird
+  - vlc
+  - transmission-gtk
+
+# AUR packages (requires yay or paru)
+aur:
+  - yay
+  - paru
+  - visual-studio-code-bin
+  - spotify
+  - discord
+  - brave-bin
+  - ghostty
+  - lazygit
+  - auto-cpufreq
+
+# Development languages and tools
+languages:
+  - rust
+  - cargo
+  - python-poetry
+  - python-black
+  - python-isort
+  - python-mypy
+  - eslint
+  - prettier
+  - typescript
+  - lua
+  - lua-language-server
+
+# Gaming (optional)
+gaming:
+  - steam
+  - lutris
+  - wine
+  - winetricks
+  - gamemode
+  - mangohud
