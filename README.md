@@ -195,6 +195,7 @@ This dotfiles setup includes **WezTerm** as the recommended terminal with full s
 
 ## 📚 Documentation
 
+- **[Essential Packages](ESSENTIAL_PACKAGES.md)** - Must-have tools for new system setup
 - **[Sync Guide](DOTFILES_SYNC_GUIDE.md)** - Detailed sync script documentation
 - **[WezTerm Guide](.config/wezterm/README.md)** - Terminal with sidebar support
 - **[Ghostty Guide](.config/ghostty/README.md)** - Fast terminal configuration

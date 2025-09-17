@@ -1,22 +1,21 @@
--- WezTerm Configuration with Ghostty-like keybindings and Rose Pine theme
+-- WezTerm Configuration with Ghostty-like keybindings and Neofusion theme
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
+local mux = wezterm.mux
 
 -- ====================================
--- APPEARANCE - Rose Pine Theme
+-- APPEARANCE - Neofusion Theme
 -- ====================================
-config.color_scheme = 'rose-pine'
 config.font = wezterm.font('JetBrainsMono Nerd Font', { weight = 'Regular' })
-config.font_size = 14.5
+config.font_size = 14.8
 
 -- Window appearance
-config.window_background_opacity = 0.93
-config.window_decorations = 'RESIZE'
-config.enable_tab_bar = true
-config.hide_tab_bar_if_only_one_tab = false
-config.tab_bar_at_bottom = false
+config.window_background_opacity = 0.75
+config.window_decorations = 'NONE'
+config.enable_tab_bar = false
+config.hide_tab_bar_if_only_one_tab = true
 
--- Remove padding
+-- Remove all padding
 config.window_padding = {
   left = 0,
   right = 0,
@@ -24,24 +23,48 @@ config.window_padding = {
   bottom = 0,
 }
 
--- Rose Pine colors for UI elements
-config.colors = {
-  tab_bar = {
-    background = '#191724',
-    active_tab = {
-      bg_color = '#31748f',
-      fg_color = '#e0def4',
-    },
-    inactive_tab = {
-      bg_color = '#26233a',
-      fg_color = '#6e6a86',
-    },
-    inactive_tab_hover = {
-      bg_color = '#403d52',
-      fg_color = '#e0def4',
-    },
+-- Dark theme matching Neovim
+local dark_theme = {
+  foreground = "#ffffff",
+  background = "#000000",
+  cursor_bg = "#ffffff",
+  cursor_border = "#ffffff",
+  cursor_fg = "#000000",
+  selection_bg = "#264f78",
+  selection_fg = "#ffffff",
+  ansi = {
+    "#000000",  -- Black
+    "#cd3131",  -- Red
+    "#0dbc79",  -- Green
+    "#e5e510",  -- Yellow (matching your go-task color)
+    "#cc4400",  -- Blue -> Dark Orange (primary color)
+    "#bc3fbc",  -- Magenta
+    "#11a8cd",  -- Cyan
+    "#e5e5e5",  -- White
+  },
+  brights = {
+    "#666666",  -- Bright Black
+    "#f14c4c",  -- Bright Red
+    "#23d18b",  -- Bright Green
+    "#f5f543",  -- Bright Yellow (brighter orange/yellow)
+    "#ff6600",  -- Bright Blue -> Medium Dark Orange (primary color)
+    "#d670d6",  -- Bright Magenta
+    "#29b8db",  -- Bright Cyan
+    "#ffffff",  -- Bright White
   },
 }
+
+config.colors = dark_theme
+
+-- ====================================
+-- STARTUP CONFIGURATION
+-- ====================================
+
+-- Start maximized without decorations (borderless fullscreen)
+wezterm.on('gui-startup', function(cmd)
+  local tab, pane, window = mux.spawn_window(cmd or {})
+  window:maximize()
+end)
 
 -- ====================================
 -- GHOSTTY-COMPATIBLE KEYBINDINGS
@@ -71,11 +94,11 @@ config.keys = {
   { key = ']', mods = 'CTRL|SHIFT', action = act.ActivateTabRelative(1) },
 
   -- ===== PANE MANAGEMENT (SIDEBAR FUNCTIONALITY) =====
-  -- Create splits (matching your Ghostty config)
-  { key = 's', mods = 'CTRL|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } }, -- Left sidebar
-  { key = 'd', mods = 'CTRL|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },   -- Right sidebar
-  { key = 'o', mods = 'CTRL|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } }, -- Ghostty compat
-  { key = 'e', mods = 'CTRL|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },   -- Bottom split
+  -- Create splits (fixed directions)
+  { key = 's', mods = 'CTRL|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },   -- Horizontal split (side by side)
+  { key = 'd', mods = 'CTRL|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } }, -- Vertical split (top/bottom)
+  { key = 'o', mods = 'CTRL|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },   -- Side split
+  { key = 'e', mods = 'CTRL|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } }, -- Bottom split
 
   -- Navigate panes (matching your Ghostty navigation)
   { key = 'h', mods = 'CTRL|ALT', action = act.ActivatePaneDirection 'Left' },
@@ -106,50 +129,29 @@ config.keys = {
   { key = '-', mods = 'CTRL', action = act.DecreaseFontSize },
   { key = '0', mods = 'CTRL', action = act.ResetFontSize },
 
-  -- ===== SIDEBAR-SPECIFIC FEATURES =====
-  -- Quick sidebar with file manager
-  {
-    key = 'e',
-    mods = 'CTRL|ALT',
-    action = act.SplitHorizontal {
-      domain = 'CurrentPaneDomain',
-    },
-  },
-
-  -- Quick sidebar with system monitor
-  {
-    key = 'm',
-    mods = 'CTRL|ALT',
-    action = act.SplitVertical {
-      domain = 'CurrentPaneDomain',
-    },
-  },
-
-  -- Quick sidebar with git
-  {
-    key = 'g',
-    mods = 'CTRL|ALT',
-    action = act.SplitVertical {
-      domain = 'CurrentPaneDomain',
-    },
-  },
 }
 
 -- ====================================
 -- ADVANCED FEATURES
 -- ====================================
 
--- Enable scrollback
+-- Enable scrollback with scrollbar
 config.scrollback_lines = 100000
+
+-- Enable scrollbar
+config.enable_scroll_bar = true
 
 -- Enable shell integration
 config.set_environment_variables = {
   TERM = 'wezterm',
 }
 
--- Startup behavior
+-- Fullscreen startup behavior
 config.initial_cols = 120
 config.initial_rows = 30
+
+-- Start maximized/fullscreen
+config.window_close_confirmation = 'NeverPrompt'
 
 -- Disable annoying features
 config.audible_bell = 'Disabled'
@@ -166,10 +168,5 @@ config.visual_bell = {
 
 -- Session management
 config.default_workspace = 'main'
-
--- Configure tab bar
-config.tab_max_width = 25
-config.show_tabs_in_tab_bar = true
-config.show_new_tab_button_in_tab_bar = true
 
 return config
