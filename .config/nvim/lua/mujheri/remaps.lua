@@ -36,6 +36,10 @@ vim.keymap.set("v", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower win
 vim.keymap.set("v", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 
+-- Buffer switching (alternative to Ctrl+^ since Ctrl+6 is used by WezTerm)
+vim.keymap.set("n", "<leader>b", "<C-^>", { desc = "Switch to previous buffer" })
+vim.keymap.set("n", "<C-\\>", "<C-^>", { desc = "Switch to previous buffer" })
+
 -- Spectre
 
 vim.keymap.set('n', '<leader>fs', '<cmd>lua require("spectre").toggle()<CR>', {

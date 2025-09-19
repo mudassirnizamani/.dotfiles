@@ -71,7 +71,15 @@ end)
 -- ====================================
 local act = wezterm.action
 
+-- Allow line breaks in terminal applications
+config.send_composed_key_when_left_alt_is_pressed = false
+config.send_composed_key_when_right_alt_is_pressed = false
+
 config.keys = {
+  -- ===== SPECIAL KEYBINDS =====
+  -- Ctrl+Enter for line break in Claude Code (sends a literal newline)
+  { key = 'Enter', mods = 'CTRL', action = act.SendString '\n' },
+
   -- ===== TAB MANAGEMENT (Same as Ghostty) =====
   { key = 't', mods = 'CTRL', action = act.SpawnTab 'CurrentPaneDomain' },
   { key = 'w', mods = 'CTRL|SHIFT', action = act.CloseCurrentTab { confirm = true } },
@@ -97,8 +105,8 @@ config.keys = {
   -- Create splits (fixed directions)
   { key = 's', mods = 'CTRL|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },   -- Horizontal split (side by side)
   { key = 'd', mods = 'CTRL|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } }, -- Vertical split (top/bottom)
-  { key = 'o', mods = 'CTRL|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },   -- Side split
-  { key = 'e', mods = 'CTRL|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } }, -- Bottom split
+  { key = 'o', mods = 'CTRL|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },   -- Side split
+  { key = 'e', mods = 'CTRL|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } }, -- Bottom split
 
   -- Navigate panes (matching your Ghostty navigation)
   { key = 'h', mods = 'CTRL|ALT', action = act.ActivatePaneDirection 'Left' },
@@ -113,12 +121,12 @@ config.keys = {
   { key = 'DownArrow', mods = 'CTRL|ALT', action = act.ActivatePaneDirection 'Down' },
 
   -- Pane management
-  { key = 'Enter', mods = 'CTRL|SHIFT', action = act.TogglePaneZoomState }, -- Focus single pane
+  { key = 'z', mods = 'CTRL|ALT', action = act.TogglePaneZoomState }, -- Focus single pane (changed from Shift+Enter)
   { key = 'x', mods = 'CTRL|ALT', action = act.CloseCurrentPane { confirm = true } },
 
   -- ===== ADDITIONAL FEATURES =====
-  -- Fullscreen toggle (same as Ghostty)
-  { key = 'Enter', mods = 'CTRL', action = act.ToggleFullScreen },
+  -- Fullscreen toggle
+  { key = 'f', mods = 'CTRL', action = act.ToggleFullScreen },
 
   -- Copy/Paste (matching Ghostty)
   { key = 'c', mods = 'CTRL|SHIFT', action = act.CopyTo 'Clipboard' },
