@@ -21,6 +21,19 @@ return {
                 trouble = false, -- Use existing trouble config
                 luasnip = true,
             })
+
+            -- Go keymaps autocmd
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "go" },
+                callback = function(ev)
+                    -- CTRL/control keymaps for Go
+                    vim.api.nvim_buf_set_keymap(0, "n", "<C-i>", ":GoImport<CR>", {})
+                    vim.api.nvim_buf_set_keymap(0, "n", "<C-b>", ":GoBuild %:h<CR>", {})
+                    vim.api.nvim_buf_set_keymap(0, "n", "<C-t>", ":GoTestPkg<CR>", {})
+                    vim.api.nvim_buf_set_keymap(0, "n", "<C-c>", ":GoCoverage -p<CR>", {})
+                end,
+                group = vim.api.nvim_create_augroup("go_autocommands", { clear = true })
+            })
         end,
     },
     {
@@ -36,16 +49,3 @@ return {
         end
     }
 }
-
--- Go keymaps autocmd (outside the plugin table)
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "go" },
-    callback = function(ev)
-        -- CTRL/control keymaps for Go
-        vim.api.nvim_buf_set_keymap(0, "n", "<C-i>", ":GoImport<CR>", {})
-        vim.api.nvim_buf_set_keymap(0, "n", "<C-b>", ":GoBuild %:h<CR>", {})
-        vim.api.nvim_buf_set_keymap(0, "n", "<C-t>", ":GoTestPkg<CR>", {})
-        vim.api.nvim_buf_set_keymap(0, "n", "<C-c>", ":GoCoverage -p<CR>", {})
-    end,
-    group = vim.api.nvim_create_augroup("go_autocommands", { clear = true })
-})

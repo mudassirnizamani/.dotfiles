@@ -10,7 +10,7 @@ config.font = wezterm.font('JetBrainsMono Nerd Font', { weight = 'Regular' })
 config.font_size = 13.6
 
 -- Window appearance
-config.window_background_opacity = 0.75
+config.window_background_opacity = 0.25
 config.window_decorations = 'NONE'
 config.enable_tab_bar = false
 config.hide_tab_bar_if_only_one_tab = true
@@ -63,7 +63,7 @@ config.colors = dark_theme
 -- Start maximized without decorations (borderless fullscreen)
 wezterm.on('gui-startup', function(cmd)
   local tab, pane, window = mux.spawn_window(cmd or {})
-  window:maximize()
+  window:gui_window():maximize()
 end)
 
 -- ====================================

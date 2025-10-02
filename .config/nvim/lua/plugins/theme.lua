@@ -1,4 +1,5 @@
 return {
+  -- INFO: used this theme before flow
   {
     "Shatur/neovim-ayu",
     lazy = false,
@@ -10,7 +11,7 @@ return {
         overrides = {},  -- A dictionary of group names, each associated with a dictionary of parameters (`bg`, `fg`, `sp` and `style`) and colors in hex.
       })
 
-      vim.cmd("colorscheme ayu")
+      -- vim.cmd("colorscheme ayu")
     end
   },
   {
@@ -25,28 +26,33 @@ return {
     lazy = false,
     priority = 5000,
     opts = {
-      transparent = true,    -- Set transparent background.
-      fluo_color = "orange", --  Fluo color: pink, yellow, orange, or green.
-      mode = "bright",       -- Intensity of the palette: normal, bright, desaturate, or dark. Notice that dark is ugly!
-
       theme = {
-        style = "dark",    --  "dark" | "light"
-        contrast = "high", -- "default" | "high"
+        style = "dark",        -- "dark" | "light"
+        contrast = "default",     -- "default" | "high"
+        transparent = true     -- true | false
       },
       colors = {
+        mode = "bright",       -- "default" | "dark" | "light"
+        fluo = "orange",       -- "pink" | "cyan" | "yellow" | "orange" | "green"
         custom = {
-          saturation = "0", -- "" | string representing an integer between 0 and 100
-          light = "0",      -- "" | string representing an integer between 0 and 100
-        },
+          saturation = "",     -- "" | string representing an integer between 0 and 100
+          light = ""           -- "" | string representing an integer between 0 and 100
+        }
       },
       ui = {
         borders = "inverse",      -- "theme" | "inverse" | "fluo" | "none"
-        aggressive_spell = false, -- true | false
-      },
+        aggressive_spell = false  -- true | false
+      }
     },
     config = function(_, opts)
       require("flow").setup(opts)
-      -- vim.cmd "colorscheme flow"
+      vim.cmd "colorscheme flow"
+
+      -- Force transparent background
+      vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+      vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+      vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
+      vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
     end,
   },
   {
