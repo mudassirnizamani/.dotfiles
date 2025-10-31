@@ -7,7 +7,7 @@ local mux = wezterm.mux
 -- APPEARANCE - Neofusion Theme
 -- ====================================
 config.font = wezterm.font('JetBrainsMono Nerd Font', { weight = 'Regular' })
-config.font_size = 13.7
+config.font_size = 13.5
 
 -- Window appearance
 config.window_background_opacity = 0.10
