@@ -10,7 +10,7 @@ config.font = wezterm.font('JetBrainsMono Nerd Font', { weight = 'Regular' })
 config.font_size = 13.5
 
 -- Window appearance
-config.window_background_opacity = 0.10
+config.window_background_opacity = 0.60
 config.window_decorations = 'NONE'
 config.enable_tab_bar = false
 config.hide_tab_bar_if_only_one_tab = true
@@ -144,7 +144,7 @@ config.keys = {
 -- ====================================
 
 -- Enable scrollback with scrollbar
-config.scrollback_lines = 10000000
+config.scrollback_lines = 100000000
 
 -- Enable scrollbar
 config.enable_scroll_bar = true
