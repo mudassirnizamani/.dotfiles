@@ -69,3 +69,5 @@ export CHROME_EXECUTABLE=/usr/bin/google-chrome-stable
 
 # Created by `pipx` on 2025-08-23 03:44:23
 export PATH="$PATH:/home/mujheri/.local/bin"
+export GOOGLE_APPLICATION_CREDENTIALS="/home/mujheri/code/mujheri/smart_fm_server/echolex_service_account_1.json"
+export GEMINI_API_KEY=AIzaSyAFy7_IS6xiQp_7RGmeKRNkD4sFh7vCqDU

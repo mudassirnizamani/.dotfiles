@@ -120,8 +120,22 @@ set_dual_monitor_setup() {
 
 # Function to check the HDMI connection status
 is_hdmi_connected() {
-    # Check system-level detection only (more reliable)
-    local system_status=$(cat /sys/class/drm/card1-HDMI-A-1/status 2>/dev/null || echo "disconnected")
+    # Check system-level detection - try card0 first, then card1
+    local system_status="disconnected"
+    
+    # Try card0 first (most common)
+    if [ -f /sys/class/drm/card0-HDMI-A-1/status ]; then
+        system_status=$(cat /sys/class/drm/card0-HDMI-A-1/status 2>/dev/null || echo "disconnected")
+    # Fallback to card1 if card0 doesn't exist
+    elif [ -f /sys/class/drm/card1-HDMI-A-1/status ]; then
+        system_status=$(cat /sys/class/drm/card1-HDMI-A-1/status 2>/dev/null || echo "disconnected")
+    # Try to find any HDMI-A-1 port dynamically
+    else
+        local hdmi_path=$(find /sys/class/drm -name "*-HDMI-A-1" -type d 2>/dev/null | head -1)
+        if [ -n "$hdmi_path" ] && [ -f "$hdmi_path/status" ]; then
+            system_status=$(cat "$hdmi_path/status" 2>/dev/null || echo "disconnected")
+        fi
+    fi
 
     if [ "$system_status" = "connected" ]; then
         return 0

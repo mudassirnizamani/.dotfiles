@@ -7,10 +7,10 @@ local mux = wezterm.mux
 -- APPEARANCE - Neofusion Theme
 -- ====================================
 config.font = wezterm.font('JetBrainsMono Nerd Font', { weight = 'Regular' })
-config.font_size = 13.5
+config.font_size = 12.2
 
 -- Window appearance
-config.window_background_opacity = 0.60
+config.window_background_opacity = 0.70
 config.window_decorations = 'NONE'
 config.enable_tab_bar = false
 config.hide_tab_bar_if_only_one_tab = true
