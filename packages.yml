@@ -30,10 +30,6 @@ terminal:
   - lf
   - nnn
 
-
-
-
-
 # Fonts
 fonts:
   - ttf-jetbrains-mono-nerd
@@ -42,8 +38,6 @@ fonts:
   - noto-fonts-emoji
   - ttf-liberation
   - adobe-source-code-pro-fonts
-
-
 
 # Optional packages (can be skipped)
 optional:

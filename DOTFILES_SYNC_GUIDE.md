@@ -26,7 +26,7 @@ The `sync-dotfiles.sh` script automates the process of syncing configuration fil
 ./sync-dotfiles.sh
 
 # Sync specific directories only
-./sync-dotfiles.sh hypr nvim kitty
+./sync-dotfiles.sh tmux starship
 
 # Preview what would be synced (dry run)
 ./sync-dotfiles.sh -n
@@ -54,8 +54,8 @@ The `sync-dotfiles.sh` script automates the process of syncing configuration fil
 # Sync all config directories with detailed output and backups
 ./sync-dotfiles.sh -v
 
-# Quietly sync only hypr and nvim configs
-./sync-dotfiles.sh -q hypr nvim
+# Quietly sync only tmux and starship configs
+./sync-dotfiles.sh -q tmux starship
 
 # Preview what would be synced for all directories
 ./sync-dotfiles.sh -n
@@ -64,7 +64,7 @@ The `sync-dotfiles.sh` script automates the process of syncing configuration fil
 ./sync-dotfiles.sh -s
 
 # Verbose sync of specific config with full safety features
-./sync-dotfiles.sh -v ghostty wezterm
+./sync-dotfiles.sh -v tmux zsh
 ```
 
 ## How It Works
@@ -108,14 +108,14 @@ The script automatically ignores certain files:
 
 ## Typical Workflow
 
-1. **Add new config files** to your system (e.g., `~/.config/hypr/new-script.sh`)
+1. **Add new config files** to your system (e.g., `~/.config/tmux/tmux.conf`)
 2. **Run the sync script**: `./sync-dotfiles.sh` (or with `-v` for backups)
 3. **Review the changes**: Script shows what it's doing with colored output
 4. **Check git status**: Script displays git changes with helpful emoji indicators
 5. **Manual commit**: Use the suggested commands to commit when ready
    ```bash
    git add .
-   git commit -m "Add new hypr configuration"
+   git commit -m "Add new tmux configuration"
    git push origin main
    ```
 

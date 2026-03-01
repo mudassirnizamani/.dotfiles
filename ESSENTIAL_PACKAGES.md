@@ -27,8 +27,6 @@ This document lists the most important packages to install when setting up a new
 ### **Development Tools**
 - **`lazygit`** - Terminal UI for Git operations
 - **`btop`** / **`htop`** - System resource monitors
-- **`neovim`** - Modern Vim with LSP support
-- **`docker`** + **`docker-compose`** - Containerization
 
 ### **System Utilities**
 - **`stow`** - Dotfiles symlink management
@@ -41,7 +39,7 @@ This document lists the most important packages to install when setting up a new
 ### **Install All Essential Packages**
 ```bash
 # Run the install script with core + terminal categories
-./install.sh core terminal development
+./install.sh core terminal
 
 # Or install everything
 ./install.sh --all
@@ -53,7 +51,7 @@ This document lists the most important packages to install when setting up a new
 sudo pacman -S zoxide eza bat fd ripgrep fzf starship fish
 
 # Development tools
-sudo pacman -S neovim lazygit btop docker docker-compose
+sudo pacman -S lazygit btop
 
 # System utilities
 sudo pacman -S stow tree curl wget jq tmux
@@ -106,14 +104,7 @@ git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 ```
 
-### **4. Install Terminal Emulators**
-```bash
-# Install preferred terminal emulators
-sudo pacman -S wezterm kitty alacritty
 
-# Install Ghostty (AUR)
-yay -S ghostty
-```
 
 ## 📱 Quality of Life Improvements
 
@@ -151,9 +142,7 @@ alias ps='ps aux'
 ### **Essential Environment Variables**
 ```bash
 # Add to shell config
-export EDITOR='nvim'
 export BROWSER='firefox'
-export TERMINAL='wezterm'
 ```
 
 ## 🎨 Visual Enhancements
@@ -171,7 +160,7 @@ export TERMINAL='wezterm'
 ## 🚀 Workflow Recommendations
 
 ### **Daily Usage Pattern**
-1. **Open terminal** - `Super+Q` (WezTerm)
+1. **Open terminal**
 2. **Navigate quickly** - `z project-name`
 3. **Find files fast** - `fd filename` or `fzf`
 4. **Search content** - `rg "search term"`
@@ -180,10 +169,9 @@ export TERMINAL='wezterm'
 
 ### **Development Workflow**
 1. **Jump to project** - `z my-project`
-2. **Open editor** - `nvim .`
-3. **Terminal multiplexing** - `tmux` or WezTerm tabs
-4. **Version control** - `lazygit` for commits
-5. **File management** - `ranger` for quick navigation
+2. **Terminal multiplexing** - `tmux`
+3. **Version control** - `lazygit` for commits
+4. **File management** - `ranger` / `lf` for quick navigation
 
 ## 📋 New System Checklist
 
@@ -191,15 +179,10 @@ When setting up a new system:
 
 - [ ] Clone dotfiles repository
 - [ ] Run `./install.sh --all`
-- [ ] Configure shell (fish/zsh with starship)
+- [ ] Configure shell (zsh with starship)
 - [ ] Setup zoxide with shell integration
 - [ ] Configure Git credentials
 - [ ] Setup SSH keys
-- [ ] Install development languages (Node.js, Python, Rust, Go)
-- [ ] Configure Neovim with plugins
-- [ ] Setup Docker and enable service
-- [ ] Configure terminal emulator (WezTerm recommended)
-- [ ] Setup window manager (Hyprland/i3)
 - [ ] Test all keybindings and aliases
 
 ## 🔗 Resources
