@@ -153,7 +153,7 @@ return {
 						MiniFilesTitleFocused          = { fg = colors.peach, style = { "bold" } },
 
 						-- Highlight patterns for highlighting the whole line and hiding colon.
-						-- See https://github.com/echasnovski/mini.nvim/discussions/783
+						-- See https://github.com/nvim-mini/mini.nvim/discussions/783
 						MiniHipatternsFixmeBody        = { fg = colors.red, bg = colors.base },
 						MiniHipatternsFixmeColon       = { bg = colors.red, fg = colors.red, style = { "bold" } },
 						MiniHipatternsHackBody         = { fg = colors.yellow, bg = colors.base },
