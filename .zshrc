@@ -77,6 +77,8 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting dotenv direnv)
 
 source $ZSH/oh-my-zsh.sh
 
+export PATH="$PATH:/home/mujheri/binaries/flutter/bin"
+
 # --- MIGRATED FROM DOTFILES ---
 eval "$(direnv hook zsh)"
 eval "$(zoxide init zsh)"
