@@ -11,6 +11,12 @@ logo = string.rep("\n", 4) .. logo .. "\n\n"
 
 return {
 	{
+		"folke/snacks.nvim",
+		opts = {
+			dashboard = { enabled = false },
+		},
+	},
+	{
 		"folke/persistence.nvim",
 		event = "BufReadPre",                            -- this will only start session saving when an actual file was opened
 		opts = {
@@ -26,6 +32,7 @@ return {
 	{
 		"nvimdev/dashboard-nvim",
 		lazy = false, -- As https://github.com/nvimdev/dashboard-nvim/pull/450, dashboard-nvim shouldn't be lazy-loaded to properly handle stdin.
+		dependencies = { { "LazyVim/LazyVim", opts = { dashboard = false } } },
 		opts = function()
 			local opts = {
 				theme = "hyper",
