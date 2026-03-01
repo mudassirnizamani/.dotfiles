@@ -230,11 +230,9 @@ OPTIONS:
 CATEGORIES:
     core                Core system packages
     terminal            Terminal and shell tools
-    terminal_emulators  Terminal emulators
-    development         Development tools
+
     fonts               Font packages
-    media               Media and graphics tools
-    utilities           System utilities
+
     optional            Optional packages
     aur                 AUR packages
     languages           Programming languages
@@ -320,7 +318,7 @@ main() {
 
     # Determine what to install
     if [[ "$INSTALL_ALL" == "true" ]]; then
-        CATEGORIES=(core terminal terminal_emulators development fonts media utilities)
+        CATEGORIES=(core terminal fonts)
         if [[ "$SKIP_AUR" != "true" ]]; then
             CATEGORIES+=(aur)
         fi
@@ -328,7 +326,7 @@ main() {
         CATEGORIES=(core terminal)
     elif [[ ${#CATEGORIES[@]} -eq 0 ]]; then
         # Default installation
-        CATEGORIES=(core terminal terminal_emulators development fonts)
+        CATEGORIES=(core terminal fonts)
     fi
 
     # Install packages by category

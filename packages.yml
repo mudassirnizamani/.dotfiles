@@ -30,27 +30,7 @@ terminal:
   - lf
   - nnn
 
-# Terminal emulators
-terminal_emulators:
-  - alacritty
-  - kitty
-  - wezterm
-  - ghostty  # AUR package
 
-# Development tools
-development:
-  - neovim
-  - code
-  - docker
-  - docker-compose
-  - nodejs
-  - npm
-  - python
-  - python-pip
-  - rustup
-  - go
-  - jq
-  - yq
 
 
 
@@ -63,26 +43,7 @@ fonts:
   - ttf-liberation
   - adobe-source-code-pro-fonts
 
-# Media and graphics
-media:
-  - mpv
-  - firefox
-  - chromium
-  - obs-studio
-  - gimp
-  - inkscape
-  - imagemagick
 
-# System utilities
-utilities:
-  - networkmanager
-  - network-manager-applet
-  - blueman
-  - pavucontrol
-  - thunar
-  - file-roller
-  - gparted
-  - gnome-disk-utility
 
 # Optional packages (can be skipped)
 optional:
