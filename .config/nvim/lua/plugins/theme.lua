@@ -1,61 +1,75 @@
 return {
   {
-    "0xstepit/flow.nvim",
+    "rebelot/kanagawa.nvim",
     lazy = false,
-    priority = 5000,
+    priority = 1000,
     opts = {
-      theme = {
-        style = "dark",        -- "dark" | "light"
-        contrast = "high",     -- "default" | "high" -> Boosted to high for better colors
-        transparent = true     -- true | false
+      compile = false,             -- enable compiling the colorscheme
+      undercurl = true,            -- enable undercurls
+      commentStyle = { italic = true },
+      functionStyle = {},
+      keywordStyle = { italic = true},
+      statementStyle = { bold = true },
+      typeStyle = {},
+      transparent = true,         -- do not set background color
+      dimInactive = false,         -- dim inactive window `:h hl-NormalNC`
+      terminalColors = true,       -- define vim.g.terminal_color_{0,17}
+      colors = {                 -- add/modify theme and palette colors
+        palette = {},
+        theme = {
+          wave = {},
+          lotus = {},
+          dragon = {},
+          all = {
+            ui = {
+              bg_gutter = "none"
+            }
+          }
+        },
       },
-      colors = {
-        mode = "default",       -- "default" | "dark" | "light"
-        fluo = "orange",       -- "pink" | "cyan" | "yellow" | "orange" | "green"
-        custom = {
-          saturation = "",     
-          light = ""           
+      overrides = function(colors)
+        local theme = colors.theme
+        return {
+          -- Transparent floating windows 
+          NormalFloat = { bg = "none" },
+          FloatBorder = { bg = "none" },
+          FloatTitle = { bg = "none" },
+
+          -- Save an hlgroup with dark background and dimmed foreground
+          -- so that you can use it where your still want dark windows.
+          -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
+          NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
+
+          -- Popular plugins that open floats will link to NormalFloat by default;
+          -- set their background accordingly if you wish to keep them dark and borderless
+          LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+          MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
+
+          -- Make telescope borders pop out a bit more on transparent background
+          TelescopeTitle = { fg = theme.ui.special, bold = true },
+          TelescopePromptNormal = { bg = "none" },
+          TelescopePromptBorder = { fg = theme.ui.bg_p1, bg = "none" },
+          TelescopeResultsNormal = { fg = theme.ui.fg_dim, bg = "none" },
+          TelescopeResultsBorder = { fg = theme.ui.bg_m1, bg = "none" },
+          TelescopePreviewNormal = { bg = "none" },
+          TelescopePreviewBorder = { bg = "none", fg = theme.ui.bg_dim },
         }
+      end,
+      theme = "wave",              -- Load "wave" theme when 'background' option is not set
+      background = {               -- map the value of 'background' option to a theme
+        dark = "wave",           -- try "dragon" !
+        light = "lotus"
       },
-      ui = {
-        borders = "inverse",      
-        aggressive_spell = false  
-      }
     },
     config = function(_, opts)
-      require("flow").setup(opts)
-      vim.cmd("colorscheme flow")
-
-      -- Safely force transparent backgrounds without destroying foreground syntax colors!
-      vim.cmd([[
-        hi Normal guibg=NONE ctermbg=NONE
-        hi NormalFloat guibg=NONE ctermbg=NONE
-        hi NormalNC guibg=NONE ctermbg=NONE
-        hi SignColumn guibg=NONE ctermbg=NONE
-        hi LineNr guibg=NONE ctermbg=NONE
-        hi CursorLineNr guibg=NONE ctermbg=NONE
-        hi EndOfBuffer guibg=NONE ctermbg=NONE
-      ]])
-
-      -- The user noticed Function and Variable colors were "missing".
-      -- Flow theme natively sets standard variables to plain gray (c.fg). 
-      -- Let's override them with vibrant colors to match standard LazyVim expectations:
-      vim.cmd([[
-        hi @variable guifg=#c8d3f5
-        hi @function guifg=#82aaff
-        hi @function.call guifg=#82aaff
-        hi @function.builtin guifg=#ff9e64
-        hi @variable.parameter guifg=#ffc777
-        hi @property guifg=#4fd6be
-        hi @keyword guifg=#c099ff
-        hi @type guifg=#ffcb6b
-      ]])
+      require("kanagawa").setup(opts)
+      vim.cmd("colorscheme kanagawa")
     end,
   },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "flow",
+      colorscheme = "kanagawa",
     },
   },
 }
