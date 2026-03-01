@@ -56,8 +56,10 @@ create_backup() {
 
 # Function to check if a file should be ignored
 should_ignore() {
-    local file="$1"
-    local ignore_patterns=(
+    local rel_path="$1"
+    local base="$(basename "$rel_path")"
+
+    local ignore_base_patterns=(
         ".git"
         ".gitignore"
         "*.tmp"
@@ -76,11 +78,33 @@ should_ignore() {
         "*.pyo"
     )
     
-    for pattern in "${ignore_patterns[@]}"; do
-        if [[ "$file" == $pattern ]]; then
+    for pattern in "${ignore_base_patterns[@]}"; do
+        if [[ "$base" == $pattern ]]; then
             return 0
         fi
     done
+
+    # Ignore Omarchy LazyVim core files from being absorbed into dotfiles
+    local ignore_path_patterns=(
+        "lazy-lock.json"
+        "lazyvim.json"
+        "stylua.toml"
+        ".neoconf.json"
+        "lua/config/autocmds.lua"
+        "lua/config/keymaps.lua"
+        "lua/config/lazy.lua"
+        "lua/config/options.lua"
+        "lua/config/init.lua"
+        "README.md"
+        "LICENSE"
+    )
+
+    for pattern in "${ignore_path_patterns[@]}"; do
+        if [[ "$rel_path" == "$pattern" ]]; then
+            return 0
+        fi
+    done
+
     return 1
 }
 
@@ -109,7 +133,7 @@ sync_config_dir() {
         local dotfiles_file="$dotfiles_dir/$rel_path"
         
         # Skip if should be ignored
-        if should_ignore "$(basename "$file")"; then
+        if should_ignore "$rel_path"; then
             continue
         fi
         
@@ -386,7 +410,7 @@ main() {
                 local rel_path="${file#$system_dir/}"
                 local dotfiles_file="$dotfiles_dir/$rel_path"
                 
-                if should_ignore "$(basename "$file")"; then
+                if should_ignore "$rel_path"; then
                     continue
                 fi
                 
