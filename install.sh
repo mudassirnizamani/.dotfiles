@@ -208,13 +208,7 @@ setup_services() {
         print_success "Bluetooth enabled"
     fi
 
-    # Setup auto-cpufreq if config exists
-    if [[ -f "$SCRIPT_DIR/auto-cpufreq.conf" ]] && command -v auto-cpufreq &> /dev/null; then
-        print_status "Setting up auto-cpufreq..."
-        sudo cp "$SCRIPT_DIR/auto-cpufreq.conf" /etc/auto-cpufreq.conf
-        sudo systemctl enable --now auto-cpufreq
-        print_success "auto-cpufreq configured and enabled"
-    fi
+
 }
 
 # Show help
@@ -228,7 +222,6 @@ OPTIONS:
     -h, --help          Show this help message
     -a, --all           Install all package categories
     -c, --core-only     Install only core packages
-    -d, --desktop       Install desktop environment packages
     -s, --skip-aur      Skip AUR packages
     --no-stow           Skip dotfiles setup with stow
     --no-shell          Skip shell setup
@@ -239,7 +232,6 @@ CATEGORIES:
     terminal            Terminal and shell tools
     terminal_emulators  Terminal emulators
     development         Development tools
-    desktop             Window manager and desktop
     fonts               Font packages
     media               Media and graphics tools
     utilities           System utilities
@@ -251,8 +243,8 @@ CATEGORIES:
 Examples:
     $0 --all                    # Install everything
     $0 --core-only             # Install only core packages
-    $0 core terminal desktop   # Install specific categories
-    $0 --skip-aur core desktop # Install without AUR packages
+    $0 core terminal           # Install specific categories
+    $0 --skip-aur core         # Install without AUR packages
 
 HELP_EOF
 }
@@ -260,7 +252,6 @@ HELP_EOF
 # Parse command line arguments
 INSTALL_ALL=false
 CORE_ONLY=false
-DESKTOP_ONLY=false
 SKIP_AUR=false
 NO_STOW=false
 NO_SHELL=false
@@ -279,10 +270,6 @@ while [[ $# -gt 0 ]]; do
             ;;
         -c|--core-only)
             CORE_ONLY=true
-            shift
-            ;;
-        -d|--desktop)
-            DESKTOP_ONLY=true
             shift
             ;;
         -s|--skip-aur)
@@ -333,17 +320,15 @@ main() {
 
     # Determine what to install
     if [[ "$INSTALL_ALL" == "true" ]]; then
-        CATEGORIES=(core terminal terminal_emulators development desktop fonts media utilities)
+        CATEGORIES=(core terminal terminal_emulators development fonts media utilities)
         if [[ "$SKIP_AUR" != "true" ]]; then
             CATEGORIES+=(aur)
         fi
     elif [[ "$CORE_ONLY" == "true" ]]; then
         CATEGORIES=(core terminal)
-    elif [[ "$DESKTOP_ONLY" == "true" ]]; then
-        CATEGORIES=(core desktop fonts)
     elif [[ ${#CATEGORIES[@]} -eq 0 ]]; then
         # Default installation
-        CATEGORIES=(core terminal terminal_emulators development desktop fonts)
+        CATEGORIES=(core terminal terminal_emulators development fonts)
     fi
 
     # Install packages by category

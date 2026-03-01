@@ -52,37 +52,7 @@ development:
   - jq
   - yq
 
-# Window manager and desktop
-desktop:
-  - hyprland
-  - waybar
-  - wofi
-  - rofi
-  - mako
-  - swaylock
-  - wlogout
-  - grim
-  - slurp
-  - swappy
-  - wl-clipboard
-  - xdg-desktop-portal-hyprland
-  - pipewire
-  - pipewire-alsa
-  - pipewire-pulse
-  - wireplumber
 
-# i3 window manager (fallback)
-i3wm:
-  - i3-wm
-  - i3blocks
-  - i3status
-  - i3lock
-  - dmenu
-  - polybar
-  - picom
-  - feh
-  - scrot
-  - xclip
 
 # Fonts
 fonts:
