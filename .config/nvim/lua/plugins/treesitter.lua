@@ -86,7 +86,6 @@ return {
 		event = "VeryLazy",
 		enabled = true,
 	},
-	},
 	-- {
 	-- 	"nvim-treesitter/nvim-treesitter-context", -- Show code context
 	-- 	opts = { enable = true, mode = "topline", line_numbers = true }
