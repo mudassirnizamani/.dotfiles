@@ -292,7 +292,8 @@ return { -- LSP Configuration & Plugins
 			},
 		})
 
-		require("flutter-tools").setup {} -- use defaults
+		-- Note: flutter-tools is configured in lua/plugins/lang/flutter-tools.lua
+		-- Do NOT call setup here - it would override the full config with empty defaults
 
 		-- Turn on lsp status information
 		require('fidget').setup()

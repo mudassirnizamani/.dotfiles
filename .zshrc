@@ -11,7 +11,7 @@ alias cd="z"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
+ZSH_THEME="agnoster"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -78,6 +78,12 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting dotenv direnv)
 source $ZSH/oh-my-zsh.sh
 
 export PATH="$PATH:/home/mujheri/binaries/flutter/bin"
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+
 
 # --- MIGRATED FROM DOTFILES ---
 eval "$(direnv hook zsh)"
