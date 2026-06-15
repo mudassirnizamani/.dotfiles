@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -77,12 +77,14 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting dotenv direnv)
 
 source $ZSH/oh-my-zsh.sh
 
-export PATH="$PATH:/home/mujheri/binaries/flutter/bin"
+export PATH="$PATH:$HOME/binaries/flutter/bin"
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
+
+export PATH=$PATH:/usr/local/go/bin
 
 
 # --- MIGRATED FROM DOTFILES ---
@@ -90,7 +92,7 @@ eval "$(direnv hook zsh)"
 eval "$(zoxide init zsh)"
 
 alias cd="z"
-alias ls="exa --color always --header --icons"
+alias ls="eza --color always --header --icons"
 
 prompt_context() {}
 
@@ -103,3 +105,7 @@ setopt hist_ignore_dups
 setopt hist_verify
 
 eval "$(starship init zsh)"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
