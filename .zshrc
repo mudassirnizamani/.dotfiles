@@ -85,6 +85,9 @@ export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 
 export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:$HOME/go/bin
+
+export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 
 # --- MIGRATED FROM DOTFILES ---

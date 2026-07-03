@@ -25,7 +25,7 @@ return {
         dev_tools = { autostart = false, auto_open_browser = false },
         outline = { open_cmd = "30vnew", auto_open = false },
         lsp = {
-          color = { enabled = false },
+
           capabilities = function(config)
             local ok, cmp = pcall(require, "cmp_nvim_lsp")
             if ok and cmp then

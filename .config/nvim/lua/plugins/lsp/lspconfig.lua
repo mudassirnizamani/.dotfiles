@@ -287,6 +287,16 @@ return { -- LSP Configuration & Plugins
 							if prev_on_attach then prev_on_attach(client, bufnr) end
 						end
 					end
+					
+					-- Disable semantic tokens for gopls to let treesitter handle highlighting
+					if server_name == "gopls" then
+						local prev_on_attach = server.on_attach
+						server.on_attach = function(client, bufnr)
+							client.server_capabilities.semanticTokensProvider = nil
+							if prev_on_attach then prev_on_attach(client, bufnr) end
+						end
+					end
+
 					require("lspconfig")[server_name].setup(server)
 				end,
 			},
