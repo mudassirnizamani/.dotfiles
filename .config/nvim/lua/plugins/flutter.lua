@@ -17,8 +17,8 @@ return {
         debugger = { enabled = false, run_via_dap = false, exception_breakpoints = {} },
         root_patterns = { ".git", "pubspec.yaml" },
         fvm = false,
-        -- GUI-launched Neovim doesn't source .zshrc; use shell to find flutter
-        flutter_lookup_cmd = "zsh -i -c 'which flutter'",
+        -- Use explicit flutter path instead of shell lookup
+        flutter_path = "/home/mahapara/binaries/flutter/bin/flutter",
         widget_guides = { enabled = false },
         closing_tags = { highlight = "Comment", prefix = "//", enabled = true },
         dev_log = { enabled = true, notify_errors = false, open_cmd = "tabedit" },

@@ -8,7 +8,9 @@ return {
 	event = "VeryLazy",
 	keys = {
 		{ "<leader>ef", ":Neotree toggle float<CR>", silent = true, desc = "Float File Explorer" },
-		{ "<leader>ee", ":Neotree toggle right<CR>", silent = true, desc = "Left File Explorer" },
+		{ "<leader>ee", ":Neotree toggle float<CR>", silent = true, desc = "Float File Explorer" },
+		{ "<leader>e", ":Neotree toggle float<CR>", silent = true, desc = "Float File Explorer" },
+		{ "<leader>E", ":Neotree toggle float<CR>", silent = true, desc = "Float File Explorer" },
 	},
 	config = function()
 		require("neo-tree").setup({
